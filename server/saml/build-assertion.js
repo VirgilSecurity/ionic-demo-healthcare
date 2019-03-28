@@ -13,7 +13,7 @@ const addDays = (moment, days) => {
 
 const subtractDays = (moment, days) => addDays(moment, -days);
 
-function buildAssertion({ issuer, inResponseTo, validDaysBefore, validDaysAfter, recipient, userEmail, audience}) {
+function buildAssertion({ issuer, inResponseTo, validDaysBefore, validDaysAfter, recipientUrl, userEmail, recipientName}) {
   const now = new Date();
   const doc = new DOMParser().parseFromString(assertionTemplate);
   doc.documentElement.setAttribute('ID', `_${randomBytes(16).toString('hex')}`);
@@ -27,7 +27,7 @@ function buildAssertion({ issuer, inResponseTo, validDaysBefore, validDaysAfter,
   confirmationData.setAttribute('InResponseTo', inResponseTo);
   confirmationData.setAttribute('NotBefore', subtractDays(now, validDaysBefore).toISOString());
   confirmationData.setAttribute('NotOnOrAfter', addDays(now, validDaysAfter).toISOString());
-  confirmationData.setAttribute('Recipient', recipient);
+  confirmationData.setAttribute('Recipient', recipientUrl);
 
   // conditions
   const conditions = doc.documentElement.getElementsByTagName('saml2:Conditions')[0];
@@ -36,7 +36,7 @@ function buildAssertion({ issuer, inResponseTo, validDaysBefore, validDaysAfter,
 
   // audience
   const audienceEl = doc.documentElement.getElementsByTagName('saml2:Audience')[0];
-  audienceEl.textContent = audience;
+  audienceEl.textContent = recipientName;
 
   // email
   const emailAttribute = doc.documentElement.getElementsByTagName('saml2:AttributeValue')[0];

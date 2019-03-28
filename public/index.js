@@ -12,7 +12,7 @@ const register = function() {
   .then(resp => {
       if(resp)
           if (resp.redirect) {
-              window.open(resp.redirect);
+              window.location.replace(resp.redirect);
               return resp.notifier;
           }
       else {

@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const { readFileSync } = require('fs');
 const { join } = require('path');
 const { randomBytes } = require('crypto');
@@ -15,10 +13,27 @@ const removeWhitespace = xml => xml
     .replace(/>(\s*)</g, '><')
     .trim();
 
-function buildResponse({ privateKey, destination, inResponseTo, issuer, validDaysBefore, validDaysAfter, recipient, userEmail }) {
+const getDefaults = () => ({
+  inResponseTo: uuid.v4(),
+  validDaysBefore: 2,
+  validDaysAfter: 2
+})
+
+function buildResponse(options) {
+  const { 
+    privateKey, 
+    userEmail,
+    recipientUrl,
+    recipientName, 
+    issuer, 
+    inResponseTo, 
+    validDaysBefore, 
+    validDaysAfter
+  } = { ...getDefaults(), ...options };
+
   const doc = new DOMParser().parseFromString(responseTemplate);
   doc.documentElement.setAttribute('ID', `_${randomBytes(16).toString('hex')}`);
-  doc.documentElement.setAttribute('Destination', destination);
+  doc.documentElement.setAttribute('Destination', recipientName);
   doc.documentElement.setAttribute('InResponseTo', inResponseTo);
   doc.documentElement.setAttribute('IssueInstant', new Date().toISOString());
 
@@ -27,8 +42,8 @@ function buildResponse({ privateKey, destination, inResponseTo, issuer, validDay
 
   const assertion = buildAssertion({
     issuer,
-    recipient,
-    audience: destination,
+    recipientUrl,
+    recipientName,
     inResponseTo,
     validDaysBefore,
     validDaysAfter,
@@ -36,7 +51,7 @@ function buildResponse({ privateKey, destination, inResponseTo, issuer, validDay
   });
 
   doc.documentElement.appendChild(assertion);
-  console.log(signResponse(doc, privateKey));
+  return signResponse(doc, privateKey);
 }
 
 function signResponse(doc, privateKey) {
@@ -66,13 +81,4 @@ function signResponse(doc, privateKey) {
   return sig.getSignedXml();
 }
 
-buildResponse({ 
-  privateKey: process.env.PRIVATE_KEY,
-  destination: 'IonicEP',
-  inResponseTo: uuid.v4(),
-  issuer: 'svrenrolltool',
-  validDaysBefore: 2,
-  validDaysAfter: 2,
-  recipient: process.env.ENROLLMENT_ENDPOINT,
-  userEmail: 'testuser@virgilsecurity.com'
-});
+module.exports = buildResponse;
