@@ -1,4 +1,4 @@
-const sdk = new window.IonicSdk.ISAgent('http://localhost:8080/ionic/');
+const sdk = new window.IonicSdk.ISAgent('https://preview-api.ionic.com/jssdk/latest/');
 
 async function generateAssertion() {
   console.log('Fetching assertion...');

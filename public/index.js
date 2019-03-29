@@ -5,7 +5,7 @@ const appData = {
   enrollmentUrl: 'http://localhost:8080/enrollment.html'
 };
 
-const sdk = new window.IonicSdk.ISAgent('http://localhost:8080/ionic/');
+const sdk = new window.IonicSdk.ISAgent('https://preview-api.ionic.com/jssdk/latest/');
 
 const register = function() {
   return sdk.enrollUser(appData)
