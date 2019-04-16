@@ -15,8 +15,8 @@ const removeWhitespace = xml => xml
 
 const getDefaults = () => ({
   inResponseTo: uuid.v4(),
-  validDaysBefore: 2,
-  validDaysAfter: 2
+  validDaysBefore: 0,
+  validDaysAfter: 1
 })
 
 function buildResponse(options) {

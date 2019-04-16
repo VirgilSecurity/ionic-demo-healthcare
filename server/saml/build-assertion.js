@@ -25,8 +25,13 @@ function buildAssertion({ issuer, inResponseTo, validDaysBefore, validDaysAfter,
   // subject
   const confirmationData = doc.documentElement.getElementsByTagName('saml2:SubjectConfirmationData')[0];
   confirmationData.setAttribute('InResponseTo', inResponseTo);
-  confirmationData.setAttribute('NotBefore', subtractDays(now, validDaysBefore).toISOString());
-  confirmationData.setAttribute('NotOnOrAfter', addDays(now, validDaysAfter).toISOString());
+  if (validDaysBefore) {
+    confirmationData.setAttribute('NotBefore', subtractDays(now, validDaysBefore).toISOString());
+  }
+  if (validDaysAfter) {
+    confirmationData.setAttribute('NotOnOrAfter', addDays(now, validDaysAfter).toISOString());
+  }
+  
   confirmationData.setAttribute('Recipient', recipientUrl);
 
   // conditions
