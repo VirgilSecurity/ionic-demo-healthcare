@@ -1,6 +1,6 @@
 const appData = {
   appId: 'helloworld',
-  userId: 'virgil_developer',
+  userId: 'virgil_doctor',
   userAuth: 'password123',
   enrollmentUrl: 'http://localhost:8080/enrollment.html'
 };
