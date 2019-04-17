@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 const express = require('express');
 const morgan = require('morgan');
-const { body: checkBody, validationResult } = require('express-validator/check');
+const { body: checkBody, validationResult, oneOf } = require('express-validator/check');
 const buildResponse = require('./server/saml/build-response');
 const getIonicAssertion = require('./server/get-ionic-assertion');
 const debug = require('./server/debug');
@@ -17,6 +17,13 @@ app.disable('x-powered-by');
 app.use(morgan('dev'));
 app.use(express.static('public'));
 app.use(express.json());
+
+let state = {
+  medical_history: '',
+  office_visit_notes: '',
+  perscription: '',
+  insurer_reply: ''
+};
 
 app.post(
   '/register', 
@@ -87,6 +94,42 @@ app.post(
     }
 
     res.status(200).json({ assertion: ionicAssertion, user });
+  }
+);
+
+app.get('/state', (req, res) => {
+  res.json(state);
+});
+
+app.put(
+  '/state',
+  [
+    oneOf([
+      checkBody('medical_history').not().isEmpty(),
+      checkBody('office_visit_notes').not().isEmpty(),
+      checkBody('perscription').not().isEmpty(),
+      checkBody('insurer_reply').not().isEmpty(),
+    ], 'At least one property to update must be specified')
+  ],
+  (req, res) => {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+      return res.status(400).json({
+        error: 'Invalid request body',
+        errors: validationErrors.array().map(({ msg: message, param }) => ({ param, message }))
+      });
+    }
+
+    const { medical_history, office_visit_notes, perscription, insurer_reply } = req.body; 
+    const newState = { medical_history, office_visit_notes, perscription, insurer_reply };
+    
+    Object.keys(newState).forEach(key => {
+      if (newState[key] !== undefined) {
+        state[key] = newState[key];
+      }
+    });
+
+    res.json(state);
   }
 );
 
