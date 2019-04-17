@@ -14,6 +14,7 @@
     "debug": "^4.1.1",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
+    "express-validator": "^5.3.1",
     "got": "^9.6.0",
     "morgan": "^1.9.1",
     "uuid": "^3.3.2",
