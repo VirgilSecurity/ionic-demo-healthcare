@@ -5,6 +5,7 @@ const buildResponse = require('./server/saml/build-response');
 const getIonicAssertion = require('./server/get-ionic-assertion');
 const debug = require('./server/debug');
 const IonicClient = require('./server/ionic/client');
+const UserService = require('./server/ionic/user-service');
 
 dotenv.config();
 
@@ -17,20 +18,23 @@ app.use(express.json());
 app.post('/register', async (req, res) => {
   const { firstName, lastName, email, groupName } = req.body;
 
-  const client = new IonicClient({
-    baseUrl: process.env.IONIC_API_BASE_URL,
-    tenantId: process.env.IONIC_TENANT_ID,
-    authToken: process.env.IONIC_API_AUTH_TOKEN
-  });
+  const userService = new UserService(
+    new IonicClient({
+      baseUrl: process.env.IONIC_API_BASE_URL,
+      tenantId: process.env.IONIC_TENANT_ID,
+      authToken: process.env.IONIC_API_AUTH_TOKEN
+    })
+  );
 
-  debug('creating user');
+  debug('fetching user');
   let user;
   try {
-    user = await client.createUser({ firstName, lastName, email, groupName });
-    debug('user created');
+    user = await userService.getOrCreateUser({ email, groupName, firstName, lastName });
+    debug('user fetched');
   } catch (err) {
+    debug('error fetching user %o', err);
     const message = typeof err.body === 'object' && 'message' in err.body ? err.body.message : err.message;
-    res.status(400).json({ error: message });
+    res.status(500).json({ error: message });
     return;
   }
 
@@ -47,7 +51,7 @@ app.post('/register', async (req, res) => {
     });
     debug('assertion generated');
   } catch (err) {
-    debug('Error sending SAML assertion: %o', err);
+    debug('error sending SAML assertion: %o', err);
     res.status(500).json({ error: err.message });
     return;
   }
@@ -58,7 +62,7 @@ app.post('/register', async (req, res) => {
     ionicAssertion = await getIonicAssertion(process.env.ENROLLMENT_ENDPOINT, samlResponse);
     debug('got Ionic assertion');
   } catch(err) {
-    debug('Error getting Ionic assertion: %o', err);
+    debug('error getting Ionic assertion: %o', err);
     res.status(500).json({ error: err.message });
     return;
   }

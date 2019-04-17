@@ -1,13 +1,26 @@
 const got = require('got');
-
-const GROUP_NAMES_TO_IDS = {
-  'patients': '5cab158ce5a7320cf0fd0416',
-  'physicians': '5cab15eb3053363b20fd03c5',
-  'insurers': '5cab160c9c97e32f42fd0412'
-};
+const searchParamsBuilderFactory = require('./search-params-builder');
 
 const SCIM_SCHEMA_CORE = 'urn:scim:schemas:core:1.0';
 const SCIM_SCHEMA_IONIC_EXT = 'urn:scim:schemas:extension:ionic:1.0';
+
+const FILTER_OPERATORS = [
+  '__contains', '__startswith', '__gte', '__lte', '__between', '__ne', '__empty', '__any', '__all'
+];
+const USER_SEARCH_PARAMS = [
+  'domainUpn', 'email', 'enabled', 'externalId', 'groups', 'roles', 'createdTs', 'updatedTs'
+];
+const GROUP_SEARCH_PARAMS = ['externalId', 'name', 'description', 'createdTs', 'updatedTs'];
+
+const buildUserSearchParams = searchParamsBuilderFactory(
+  USER_SEARCH_PARAMS,
+  FILTER_OPERATORS
+);
+
+const buildGroupSearchParams = searchParamsBuilderFactory(
+  GROUP_SEARCH_PARAMS,
+  FILTER_OPERATORS
+);
 
 class IonicClient {
   constructor({ authToken, tenantId, baseUrl }) {
@@ -20,12 +33,7 @@ class IonicClient {
     });
   }
 
-  async createUser({ firstName, lastName, email, groupName }) {
-    const groupId = GROUP_NAMES_TO_IDS[groupName];
-    if (!groupId) {
-      throw new Error(`Unknown group name ${groupName}`);
-    }
-
+  async createUser({ firstName, lastName, email, groupId }) {
     const userData = {
       schemas: [
         SCIM_SCHEMA_CORE,
@@ -46,19 +54,35 @@ class IonicClient {
 
     const url = this._getUrl('scim/Users');
     const response = await this.client.post(url, {
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify(userData),
-      responseType: 'json'
+      body: userData,
+      json: true
     });
     return response.body;
   }
 
-  async listGroups() {
+  /**
+   * Available attributes: 
+   * "domainUpn", "email", "enabled", "externalId", "groups", "roles", "createdTs", "updatedTs", "or"
+   * Available operators: 
+   * "__contains", "__startswith", "__gte", "__lte", "__ne", "__empty", "__any", "__all"
+   * @param {{ skip: number; limit: number; attributes: string[]; searchParams: Object }}} options 
+   */
+  async findUsers(options = {}) {
+    const searchParams = buildUserSearchParams(options); 
+    const url = this._getUrl('scim/Users');
+    const response = await this.client.get(url, {
+      query: searchParams,
+      json: true
+    });
+    return response.body;
+  }
+
+  async findGroups(options = {}) {
+    const searchParams = buildGroupSearchParams(options);
     const url = this._getUrl('scim/Groups');
     const response = await this.client.get(url, {
-      responseType: 'json'
+      query: searchParams,
+      json: true
     });
     return response.body;
   }
