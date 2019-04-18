@@ -1,8 +1,8 @@
 const appData = {
   appId: 'helloworld',
-  userId: 'virgil_doctor',
+  userId: 'virgil_insurer',
   userAuth: 'password123',
-  enrollmentUrl: 'http://localhost:8080/enrollment.html'
+  enrollmentUrl: 'http://localhost:8080/index.html' // will not be used
 };
 
 const sdk = new window.IonicSdk.ISAgent('https://preview-api.ionic.com/jssdk/latest/');
@@ -10,14 +10,49 @@ const sdk = new window.IonicSdk.ISAgent('https://preview-api.ionic.com/jssdk/lat
 const register = function() {
   return sdk.enrollUser(appData)
   .then(resp => {
-      if(resp)
-          if (resp.redirect) {
-              window.location.replace(resp.redirect);
-              return resp.notifier;
-          }
-      else {
-          return Promise.reject("Error enrolling");
-      }
+    if (resp.sdkResponseCode === 0) {
+      // ignore resp.redirect and resp.notifier
+      return fetchAssertion()
+        .then(createDevice)
+        .then(() => sdk.loadUser(appData));
+    }
+    else {
+      console.log('Unexpected enrollment response: ', resp);
+      return Promise.reject('Error enrolling');
+    }
+  });
+}
+
+const fetchAssertion = function() {
+  console.log('Fetching assertion...');
+  return fetch('/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      firstName: 'Test', 
+      lastName: 'Physician', 
+      email: 'test_insurer@virgilsecurity.com', 
+      groupName: 'insurers'
+    })
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error('Assertion response was not OK');
+    }
+    return response.json();
+  }).then(({ assertion, user }) => {
+    console.log('Fetched assertion', assertion);
+    console.log('Created user', user);
+    return assertion;
+  });
+}
+
+const createDevice = function(assertion) {
+  console.log('Creating device...');
+  return sdk.createDevice(assertion).then(device => {
+    console.log('Created device', device);
+    return device;
   });
 }
 
