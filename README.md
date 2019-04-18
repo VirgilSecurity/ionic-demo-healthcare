@@ -162,7 +162,7 @@ The following environment variables must be defined to run the server:
 | ------------- | ------------ | ----------- |
 | IDP_ENTITY_ID | ionic-assertion | Identity provider name configured on your Ionic Enrollment Server. Used for SAML assertion generation |
 | ASSERTION_CONSUMER_SERVICE | IonicEP | Name of the SAML asssertion consumer configured on your Ionic Enrollment Server. Used for SAML assertion generation |
-| ENROLLMENT_ENDPOINT | https://enrollment.ionic.com/keyspace/KEYSPACE_ID/TENANT_ID/headlessenrollment/saml | URL of your Enrollment Server. Used for SAML assertion generation |
+| ENROLLMENT_ENDPOINT | https://enrollment.ionic.com/.../saml | URL of your Enrollment Server. Used for SAML assertion generation |
 | PRIVATE_KEY | Private Key in PEM format | Private key to use to sign SAML assertions |
 | IONIC_API_BASE_URL | https://api.ionic.com | Ionic Management APIs base URL for your tenant |
 | IONIC_TENANT_ID | - | Your Ionic tenant ID |
