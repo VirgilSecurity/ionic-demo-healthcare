@@ -7,6 +7,7 @@ import { Container, Col, Row, ColProps, RowProps } from "react-bootstrap";
 import ReplyForm from "./common/ReplyForm";
 import { ConditionalText } from "./common/ConditionalText";
 import { FaLock } from "react-icons/fa";
+import { asyncSequence } from './utils';
 
 const PatientCol: React.FC<ColProps> = props => (
     <Col lg="3" style={{ backgroundColor: "rgba(255, 0, 0, 0.05)", padding: 20 }} {...props} />
@@ -31,7 +32,16 @@ class App extends Component {
     store = new Store();
 
     componentDidMount() {
-      this.store.loadData();
+        this.store.loadData();
+        asyncSequence([
+            this.store.patient.loadProfile.bind(this.store.patient),
+            this.store.doctor.loadProfile.bind(this.store.doctor),
+            this.store.insurer.loadProfile.bind(this.store.insurer)
+        ]).then(() => {
+            console.log('All profiles loaded');
+        }).catch(err => {
+            console.error('Error loading profiles: %o', err);
+        });
     }
 
     render() {
