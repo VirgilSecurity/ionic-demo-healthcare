@@ -15,7 +15,6 @@ const app = express();
 
 app.disable('x-powered-by');
 app.use(morgan('dev'));
-app.use(express.static('public'));
 app.use(express.json());
 
 let state = {
@@ -132,5 +131,13 @@ app.put(
     res.json(state);
   }
 );
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'client/build')));
+
+  app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  });
+}
 
 app.listen(8080);

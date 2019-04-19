@@ -1,6 +1,6 @@
-# Ionic Demo Backend Server
+# Ionic Healthcare Demo
 
-Backend server for sample Healthcare app.
+Sample Healthcare app using Ionic.
 
 ## API
 
@@ -170,14 +170,24 @@ The following environment variables must be defined to run the server:
 
 ### Install dependencies
 
+First for the server
+
 ```
 npm i
+```
+
+Then for the client
+
+```
+cd client
+npm i
+cd ..
 ```
 
 ### Run
 
 ```
-npm start
+npm run dev
 ```
 
 The server will be listening for connections on port `8080`. Any changes to the `server.js` file will cause the server to be restarted automatically. 
