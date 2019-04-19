@@ -78,14 +78,12 @@ export class IonicAgent {
                     .then(() => this.loadUser());
             }
             else {
-                console.log('Unexpected enrollment response: ', resp);
                 return Promise.reject(new Error('Error enrolling'));
             }
         });
     }
 
     encryptText = this.runWithActiveProfile((plaintext: string, classification: DataClassification) => {
-        console.log('encrypting');
         return this.sdk.encryptStringChunkCipher({
             stringData: plaintext,
             cipher: 'v2',
@@ -97,7 +95,6 @@ export class IonicAgent {
     })
 
     decryptText = this.runWithActiveProfile((ciphertext: string) => {
-        console.log('decrypting');
         return this.sdk.decryptStringChunkCipher({stringData: ciphertext})
         .then(res => res.stringChunk);
     });
