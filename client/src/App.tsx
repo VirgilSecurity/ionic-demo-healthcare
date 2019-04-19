@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import "./App.css";
-import { BrowserRouter as Router } from "react-router-dom";
 import { Store } from "./Store";
-import { Provider, observer } from "mobx-react";
-import { Container, Col, Row, ColProps, RowProps } from "react-bootstrap";
+import { observer } from "mobx-react";
+import { Container, Col, Row, ColProps, RowProps, Alert } from "react-bootstrap";
 import ReplyForm from "./common/ReplyForm";
 import { ConditionalText } from "./common/ConditionalText";
 import { FaLock } from "react-icons/fa";
@@ -76,7 +74,9 @@ class App extends Component {
                             isReady={this.store.state.medical_history}
                             content="waiting for patient response"
                         >
-                            {this.store.state.medical_history}
+
+                            <FaFileMedicalAlt size="2em" style={{ marginRight: 10 }}/>
+                                {this.store.state.medical_history}
                         </ConditionalText>
                     </DoctorCol>
                     <InsurerCol>
