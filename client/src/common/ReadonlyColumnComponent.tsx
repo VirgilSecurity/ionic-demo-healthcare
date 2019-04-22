@@ -1,6 +1,7 @@
-import React from 'react';
-import { ReadonlyColumnModel } from '../models/ReadonlyColumnModel';
-import { observer } from 'mobx-react';
+import React from "react";
+import { ReadonlyColumnModel } from "../models/ReadonlyColumnModel";
+import { observer } from "mobx-react";
+import { FaLock } from "react-icons/fa";
 
 export interface IReadonlyColumnComponentProps {
     title: string;
@@ -8,9 +9,10 @@ export interface IReadonlyColumnComponentProps {
 }
 
 @observer
-export default class ReadonlyColumnComponent extends React.Component<IReadonlyColumnComponentProps> {
+export default class ReadonlyColumnComponent extends React.Component<
+    IReadonlyColumnComponentProps
+> {
     render() {
-
         return (
             <div>
                 <b>{this.props.title}</b>
@@ -26,11 +28,19 @@ export default class ReadonlyColumnComponent extends React.Component<IReadonlyCo
         }
 
         if (state === "Decrypting") {
-            return <p>decrypting</p>
+            return <p>decrypting</p>;
         }
 
         if (state === "Ready") {
-            return <p>{value}</p>
+            return <p>{value}</p>;
         }
-    }
+
+        if (state === "Unable To Decrypt") {
+            return (
+                <p>
+                    <FaLock size="2em" />
+                </p>
+            );
+        }
+    };
 }

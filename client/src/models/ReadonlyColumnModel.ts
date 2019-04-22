@@ -1,11 +1,23 @@
 import { observable, action, reaction } from "mobx";
 import { IonicAgent } from "./IonicAgent";
 
+export interface IReadonlyColumnModel {
+    sdk: IonicAgent;
+    valueReaction: () => string | undefined;
+}
+
 export class ReadonlyColumnModel {
     @observable state: "Waiting" | "Decrypting" | "Ready" | "Unable To Decrypt" = "Waiting";
     @observable value?: string;
-    constructor(readonly sdk: IonicAgent, reactTo: () => string | undefined) {
-        reaction(reactTo, (data) => {
+
+    sdk: IonicAgent;
+
+    constructor(options: IReadonlyColumnModel) {
+        const { sdk, valueReaction } = options;
+
+        this.sdk = sdk;
+
+        reaction(valueReaction, (data) => {
             if (data) this.decrypt(data);
         })
     }

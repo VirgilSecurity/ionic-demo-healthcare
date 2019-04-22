@@ -43,7 +43,7 @@ class App extends Component {
     render() {
         return (
             <Container>
-                <Button onClick={() => this.store.conntection.reset()}>reset medical</Button>
+                <Button onClick={() => this.store.connection.reset()}>reset medical</Button>
                 <CustomRow>
                     <PatientCol lg={{ span: 3, offset: 2 }}>
                         <h3>Patient Device</h3>
@@ -60,16 +60,13 @@ class App extends Component {
                         <h3>Patient Info</h3>
                     </InfoCol>
                     <PatientCol>
-                        <EditableColumnComponent title="Medical history" model={this.store.patientModel.medicalHistory} />
+                        <EditableColumnComponent title="Medical history:" model={this.store.patientModel.medicalHistory} />
                     </PatientCol>
                     <DoctorCol>
-                        <ReadonlyColumnComponent title="Medical history" model={this.store.doctorModel.medicalHistory} />
+                        <ReadonlyColumnComponent title="Medical history:" model={this.store.doctorModel.medicalHistory} />
                     </DoctorCol>
                     <InsurerCol>
-                        <b>Medical History:</b>
-                        <p>
-                            <FaLock size="2em" />
-                        </p>
+                        <ReadonlyColumnComponent title="Medical history:" model={this.store.insurerModel.medicalHistory} />
                     </InsurerCol>
                 </CustomRow>
                 <CustomRow>
@@ -77,42 +74,16 @@ class App extends Component {
                         <h3>Doctor Info</h3>
                     </InfoCol>
                     <PatientCol>
-                        <ReadonlyColumnComponent title="Office notes" model={this.store.patientModel.officeNotes} />
-                        <ConditionalText
-                            title="Prescription:"
-                            isReady={this.store.state.prescription}
-                            content="waiting for doctor prescription"
-                        >
-                            {this.store.state.prescription}
-                        </ConditionalText>
+                        <ReadonlyColumnComponent title="Office visit notes:" model={this.store.patientModel.officeNotes} />
+                        <ReadonlyColumnComponent title="Prescription:" model={this.store.patientModel.prescription} />
                     </PatientCol>
                     <DoctorCol>
-                        <EditableColumnComponent title="Office visit notes" model={this.store.doctorModel.officeNotes} />
-                        <ConditionalText
-                            title="Prescription:"
-                            isReady={Boolean(this.store.state.medical_history)}
-                            content="waiting for patient response"
-                        >
-                            <ReplyForm
-                                onFormSubmit={this.store.sendPrescription}
-                                value={this.store.state.prescription}
-                            />
-                        </ConditionalText>
+                        <EditableColumnComponent title="Office visit notes:" model={this.store.doctorModel.officeNotes} />
+                        <EditableColumnComponent title="Prescription:" model={this.store.doctorModel.prescription} />
                     </DoctorCol>
                     <InsurerCol>
-                        <ConditionalText
-                            title="Office visit notes"
-                            isReady={Boolean(this.store.state.office_visit_notes)}
-                            content="waiting for doctor office visit notes"
-                        >
-                            {this.store.state.office_visit_notes}
-                        </ConditionalText>
-                        <div>
-                            <b>Prescription:</b>
-                            <p>
-                                <FaLock size="2em" />
-                            </p>
-                        </div>
+                        <ReadonlyColumnComponent title="Office visit notes:" model={this.store.insurerModel.officeNotes} />
+                        <ReadonlyColumnComponent title="Prescription:" model={this.store.insurerModel.prescription} />
                     </InsurerCol>
                 </CustomRow>
                 <CustomRow>
@@ -120,34 +91,13 @@ class App extends Component {
                         <h3>Insurer Info</h3>
                     </InfoCol>
                     <PatientCol>
-                        <ConditionalText
-                            title="Insurer Reply:"
-                            isReady={this.store.state.insurer_reply}
-                            content="wait for insurer reply"
-                        >
-                            {this.store.state.insurer_reply}
-                        </ConditionalText>
+                        <ReadonlyColumnComponent title="Insurer reply:" model={this.store.patientModel.insurerReply} />
                     </PatientCol>
                     <DoctorCol>
-                        <ConditionalText
-                            title="Insurer Reply:"
-                            isReady={this.store.state.insurer_reply}
-                            content="Wait for insurance reply response"
-                        >
-                            <p>{this.store.state.insurer_reply}</p>
-                        </ConditionalText>
+                        <ReadonlyColumnComponent title="Insurer reply:" model={this.store.doctorModel.insurerReply} />
                     </DoctorCol>
                     <InsurerCol>
-                        <ConditionalText
-                            title="Insurer Reply:"
-                            isReady={this.store.state.office_visit_notes}
-                            content="Wait for doctor office visit notes"
-                        >
-                            <ReplyForm
-                                onFormSubmit={this.store.sendInsurerReply}
-                                value={this.store.state.insurer_reply}
-                            />
-                        </ConditionalText>
+                        <EditableColumnComponent title="Insurer reply:" model={this.store.insurerModel.insurerReply} />
                     </InsurerCol>
                 </CustomRow>
             </Container>

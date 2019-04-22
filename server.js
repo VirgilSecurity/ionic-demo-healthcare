@@ -18,10 +18,10 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 let state = {
-  medical_history: '',
-  office_visit_notes: '',
-  prescription: '',
-  insurer_reply: ''
+  medical_history: undefined,
+  office_visit_notes: undefined,
+  prescription: undefined,
+  insurer_reply: undefined
 };
 
 app.post(
@@ -106,7 +106,7 @@ app.put(
     oneOf([
       checkBody('medical_history').not().isEmpty(),
       checkBody('office_visit_notes').not().isEmpty(),
-      checkBody('perscription').not().isEmpty(),
+      checkBody('prescription').not().isEmpty(),
       checkBody('insurer_reply').not().isEmpty(),
     ], 'At least one property to update must be specified')
   ],
@@ -119,8 +119,8 @@ app.put(
       });
     }
 
-    const { medical_history, office_visit_notes, perscription, insurer_reply } = req.body;
-    const newState = { medical_history, office_visit_notes, perscription, insurer_reply };
+    const { medical_history, office_visit_notes, prescription, insurer_reply } = req.body;
+    const newState = { medical_history, office_visit_notes, prescription, insurer_reply };
 
     Object.keys(newState).forEach(key => {
       if (newState[key] !== undefined) {
@@ -136,10 +136,10 @@ app.delete(
   '/state',
   (req, res) => {
     state = {
-        medical_history: '',
-        office_visit_notes: '',
-        prescription: '',
-        insurer_reply: ''
+        medical_history: undefined,
+        office_visit_notes: undefined,
+        prescription: undefined,
+        insurer_reply: undefined
       };
 
     res.json(state);
