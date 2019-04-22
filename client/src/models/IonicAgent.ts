@@ -36,7 +36,6 @@ export class IonicAgent {
     private runWithActiveProfile = (fn: any) => (...args: any[]) => {
         return ActiveProfileMutex.acquire()
         .then(release => {
-            console.log('Set active profile: %s', this.profileInfo.deviceId);
             return this.sdk.setActiveProfile(this.profileInfo)
             .then(() => fn(...args))
             .then(
@@ -78,6 +77,7 @@ export class IonicAgent {
                     .then(() => this.loadUser());
             }
             else {
+                console.log('Unexpected enrollment response: ', resp);
                 return Promise.reject(new Error('Error enrolling'));
             }
         });
