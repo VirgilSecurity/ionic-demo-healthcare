@@ -39,6 +39,18 @@ class App extends Component {
             this.store.insurer.loadProfile.bind(this.store.insurer)
         ]).then(() => {
             console.log('All profiles loaded');
+            this.store.patient.encryptText('not for insurer', 'patient_physician')
+            .then(ciphertext => {
+                console.log('Patient encrypted: %s', ciphertext);
+
+                this.store.doctor.decryptText(ciphertext)
+                .then(text => console.log('Doctor decrypted: %s', text))
+                .catch(err => console.error('Doctor could not decrypt: %o', err));
+
+                this.store.insurer.decryptText(ciphertext)
+                .then(text => console.log('Insurer decrypted: %s', text))
+                .catch(err => console.error('Insurer could not decrypt: %o', err));
+            })
         }).catch(err => {
             console.error('Error loading profiles: %o', err);
         });
