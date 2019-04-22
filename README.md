@@ -20,9 +20,9 @@ Content-Type: application/json
 *Body* (all fields are required)
 ```json
 {
-  "email": "user@example.com", 
-  "groupName": "patients|physicians|insurers", 
-  "firstName": "John", 
+  "email": "user@example.com",
+  "groupName": "patients|physicians|insurers",
+  "firstName": "John",
   "lastName": "Doe"
 }
 ```
@@ -31,37 +31,37 @@ Content-Type: application/json
 
 *Body*
 ```json
-{  
-   "assertion":{  
+{
+   "assertion":{
       "X-Ionic-Reg-Uidauth": "string",
       "X-Ionic-Reg-Stoken": "string",
       "X-Ionic-Reg-Ionic-API-Urls": "string",
       "X-Ionic-Reg-Enrollment-Tag": "string",
       "X-Ionic-Reg-Pubkey": "string"
    },
-   "user": {  
+   "user": {
       "id": "5cb5f865e5a7320cf0fdf0ee",
-      "schemas": [  
+      "schemas": [
          "urn:scim:schemas:core:1.0"
       ],
-      "meta": {  
+      "meta": {
          "created":"2019-04-16T15:44:37Z",
          "lastModified":"2019-04-16T15:44:37Z",
          "location":"/v2/5c7ec51be5a7322a83fd22a5/scim/Users/5cb5f865e5a7320cf0fdf0ee",
          "version":"2"
       },
-      "name":{  
+      "name":{
          "formatted":"Test Patient",
          "familyName":"Patient",
          "givenName":"Test"
       },
-      "emails":[  
-         {  
+      "emails":[
+         {
             "value":"test_patient@virgilsecurity.com"
          }
       ],
-      "groups":[  
-         {  
+      "groups":[
+         {
             "value":"5cab158ce5a7320cf0fd0416",
             "display":"Patients"
          }
@@ -80,14 +80,14 @@ Returns the current application state
 
 #### Response
 
-*Body*
+*Body* (values may be `undefined`)
 
 ```json
 {
-	"medical_history": "",
-	"office_visit_notes": "",
-	"prescription": "",
-	"insurer_reply": ""
+	"medical_history": "history",
+	"office_visit_notes": "notes",
+	"prescription": "prescription",
+	"insurer_reply": "insurer reply"
 }
 ```
 
@@ -107,7 +107,10 @@ Content-Type: application/json
 *Body* (all fields are optional, but at least one is required)
 ```json
 {
-	"medical_history": "my medical history"
+    "medical_history": "my medical history",
+    "office_visit_notes": "my visit notes",
+	"prescription": "my prescription",
+	"insurer_reply": "my insurer reply"
 }
 ```
 
@@ -117,9 +120,9 @@ Content-Type: application/json
 ```json
 {
 	"medical_history": "my medical history",
-	"office_visit_notes": "",
-	"prescription": "",
-	"insurer_reply": ""
+    "office_visit_notes": "my visit notes",
+	"prescription": "my prescription",
+	"insurer_reply": "my insurer reply"
 }
 ```
 
@@ -141,7 +144,7 @@ Validation error responses also include `errors` property:
   "errors": [
     {
       "param": "email",
-      "message": "Invalid value" 
+      "message": "Invalid value"
     }
   ]
 }
@@ -190,7 +193,7 @@ cd ..
 npm run dev
 ```
 
-The server will be listening for connections on port `8080`. Any changes to the `server.js` file will cause the server to be restarted automatically. 
+The server will be listening for connections on port `8080`. Any changes to the `server.js` file will cause the server to be restarted automatically.
 
 ### Debug
 

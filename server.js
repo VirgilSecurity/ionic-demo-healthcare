@@ -17,12 +17,7 @@ app.disable('x-powered-by');
 app.use(morgan('dev'));
 app.use(express.json());
 
-let state = {
-  medical_history: '',
-  office_visit_notes: '',
-  prescription: '',
-  insurer_reply: ''
-};
+let state = {};
 
 app.post(
   '/register',
