@@ -86,7 +86,7 @@ Returns the current application state
 {
 	"medical_history": "",
 	"office_visit_notes": "",
-	"perscription": "",
+	"prescription": "",
 	"insurer_reply": ""
 }
 ```
@@ -118,7 +118,7 @@ Content-Type: application/json
 {
 	"medical_history": "my medical history",
 	"office_visit_notes": "",
-	"perscription": "",
+	"prescription": "",
 	"insurer_reply": ""
 }
 ```

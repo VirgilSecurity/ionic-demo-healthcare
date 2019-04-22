@@ -20,13 +20,13 @@ app.use(express.json());
 let state = {
   medical_history: '',
   office_visit_notes: '',
-  perscription: '',
+  prescription: '',
   insurer_reply: ''
 };
 
 app.post(
-  '/register', 
-  [ 
+  '/register',
+  [
     checkBody('email').isEmail(),
     checkBody('groupName').isIn(Object.keys(PREDEFINED_GROUPS)),
     checkBody('firstName').isAlpha().isLength({ max: 256 }),
@@ -40,7 +40,7 @@ app.post(
         errors: validationErrors.array().map(({ msg: message, param }) => ({ param, message }))
       });
     }
-    
+
     const { firstName, lastName, email, groupName } = req.body;
 
     const userService = new UserService(
@@ -68,7 +68,7 @@ app.post(
 
     try {
       samlResponse = buildResponse({
-        privateKey: process.env.PRIVATE_KEY, 
+        privateKey: process.env.PRIVATE_KEY,
         userEmail: email,
         recipientUrl: process.env.ENROLLMENT_ENDPOINT,
         recipientName: process.env.ASSERTION_CONSUMER_SERVICE,
@@ -106,7 +106,7 @@ app.put(
     oneOf([
       checkBody('medical_history').not().isEmpty(),
       checkBody('office_visit_notes').not().isEmpty(),
-      checkBody('perscription').not().isEmpty(),
+      checkBody('prescription').not().isEmpty(),
       checkBody('insurer_reply').not().isEmpty(),
     ], 'At least one property to update must be specified')
   ],
@@ -119,9 +119,9 @@ app.put(
       });
     }
 
-    const { medical_history, office_visit_notes, perscription, insurer_reply } = req.body; 
-    const newState = { medical_history, office_visit_notes, perscription, insurer_reply };
-    
+    const { medical_history, office_visit_notes, prescription, insurer_reply } = req.body;
+    const newState = { medical_history, office_visit_notes, prescription, insurer_reply };
+
     Object.keys(newState).forEach(key => {
       if (newState[key] !== undefined) {
         state[key] = newState[key];
