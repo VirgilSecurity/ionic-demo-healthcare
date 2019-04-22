@@ -125,6 +125,20 @@ app.put(
 
     res.json(state);
   }
+)
+;
+app.delete(
+  '/state',
+  (req, res) => {
+    state = {
+        medical_history: undefined,
+        office_visit_notes: undefined,
+        prescription: undefined,
+        insurer_reply: undefined
+      };
+
+    res.json(state);
+  }
 );
 
 if (process.env.NODE_ENV === 'production') {

@@ -1,26 +1,23 @@
 import React, { Component } from "react";
-import "./App.css";
-import { BrowserRouter as Router } from "react-router-dom";
 import { Store } from "./Store";
-import { Provider, observer } from "mobx-react";
-import { Container, Col, Row, ColProps, RowProps } from "react-bootstrap";
-import ReplyForm from "./common/ReplyForm";
-import { ConditionalText } from "./common/ConditionalText";
-import { FaLock } from "react-icons/fa";
-import { asyncSequence } from './utils';
+import { observer } from "mobx-react";
+import { Container, Col, Row, ColProps, RowProps, Button } from "react-bootstrap";
+import { asyncSequence } from "./utils";
+import EditableColumnComponent from "./components/EditableColumnComponent";
+import ReadonlyColumnComponent from "./components/ReadonlyColumnComponent";
 
-const PatientCol: React.FC<ColProps> = props => (
+const PatientCol: React.FC<ColProps & React.HTMLAttributes<HTMLDivElement>> = props => (
     <Col lg="3" style={{ backgroundColor: "rgba(255, 0, 0, 0.05)", padding: 20 }} {...props} />
 );
-const DoctorCol: React.FC<ColProps> = props => (
+const DoctorCol: React.FC<ColProps & React.HTMLAttributes<HTMLDivElement>> = props => (
     <Col lg="3" style={{ backgroundColor: "rgba(0, 255, 0, 0.05)", padding: 20 }} {...props} />
 );
-const InsurerCol: React.FC<ColProps> = props => (
+const InsurerCol: React.FC<ColProps & React.HTMLAttributes<HTMLDivElement>> = props => (
     <Col lg="3" style={{ backgroundColor: "rgba(0, 0, 255, 0.05)", padding: 20 }} {...props} />
 );
 
 const InfoCol: React.FC<ColProps> = props => (
-    <Col lg="2" style={{ backgroundColor: "rgba(0, 0, 0, 0.05)", padding: 20 }} {...props} />
+    <Col lg="3" xs style={{ backgroundColor: "rgba(0, 0, 0, 0.05)", padding: 20 }} {...props} />
 );
 
 const CustomRow: React.FC<RowProps & React.HTMLAttributes<HTMLDivElement>> = props => (
@@ -32,35 +29,21 @@ class App extends Component {
     store = new Store();
 
     componentDidMount() {
-        this.store.loadData();
         asyncSequence([
             this.store.patient.loadProfile.bind(this.store.patient),
             this.store.doctor.loadProfile.bind(this.store.doctor),
             this.store.insurer.loadProfile.bind(this.store.insurer)
-        ]).then(() => {
-            console.log('All profiles loaded');
-            this.store.patient.encryptText('not for insurer', 'patient_physician')
-            .then(ciphertext => {
-                console.log('Patient encrypted: %s', ciphertext);
-
-                this.store.doctor.decryptText(ciphertext)
-                .then(text => console.log('Doctor decrypted: %s', text))
-                .catch(err => console.error('Doctor could not decrypt: %o', err));
-
-                this.store.insurer.decryptText(ciphertext)
-                .then(text => console.log('Insurer decrypted: %s', text))
-                .catch(err => console.error('Insurer could not decrypt: %o', err));
-            })
-        }).catch(err => {
-            console.error('Error loading profiles: %o', err);
-        });
+        ]).then(this.store.loadData);
     }
 
     render() {
         return (
-            <Container>
+            <Container fluid>
                 <CustomRow>
-                    <PatientCol lg={{ span: 3, offset: 2 }}>
+                    <InfoCol>
+                        <Button variant="outline-danger" onClick={this.store.reset}>reset</Button>
+                    </InfoCol>
+                    <PatientCol>
                         <h3>Patient Device</h3>
                     </PatientCol>
                     <DoctorCol>
@@ -75,27 +58,22 @@ class App extends Component {
                         <h3>Patient Info</h3>
                     </InfoCol>
                     <PatientCol>
-                        <b>Medical history:</b>
-                        <br />
-                        <ReplyForm
-                            onFormSubmit={this.store.sendMedicalHistory}
-                            value={this.store.state.medical_history}
+                        <EditableColumnComponent
+                            title="Medical history:"
+                            model={this.store.patientModel.medicalHistory}
                         />
                     </PatientCol>
                     <DoctorCol>
-                        <ConditionalText
-                            title="Medical History:"
-                            isReady={this.store.state.medical_history}
-                            content="waiting for patient response"
-                        >
-                            {this.store.state.medical_history}
-                        </ConditionalText>
+                        <ReadonlyColumnComponent
+                            title="Medical history:"
+                            model={this.store.doctorModel.medicalHistory}
+                        />
                     </DoctorCol>
                     <InsurerCol>
-                        <b>Medical History:</b>
-                        <p>
-                            <FaLock size="2em" />
-                        </p>
+                        <ReadonlyColumnComponent
+                            title="Medical history:"
+                            model={this.store.insurerModel.medicalHistory}
+                        />
                     </InsurerCol>
                 </CustomRow>
                 <CustomRow>
@@ -103,94 +81,60 @@ class App extends Component {
                         <h3>Doctor Info</h3>
                     </InfoCol>
                     <PatientCol>
-                        <ConditionalText
-                            title="Office Visit Notes:"
-                            isReady={this.store.state.office_visit_notes}
-                            content="waiting for doctor office visit notes"
-                        >
-                            {this.store.state.office_visit_notes}
-                        </ConditionalText>
-                        <ConditionalText
+                        <ReadonlyColumnComponent
+                            style={{ marginBottom: 20 }}
+                            title="Office visit notes:"
+                            model={this.store.patientModel.officeNotes}
+                        />
+                        <ReadonlyColumnComponent
                             title="Prescription:"
-                            isReady={this.store.state.prescription}
-                            content="waiting for doctor prescription"
-                        >
-                            {this.store.state.prescription}
-                        </ConditionalText>
+                            model={this.store.patientModel.prescription}
+                        />
                     </PatientCol>
                     <DoctorCol>
-                        <ConditionalText
+                        <EditableColumnComponent
+                            style={{ marginBottom: 20 }}
                             title="Office visit notes:"
-                            isReady={Boolean(this.store.state.medical_history)}
-                            content="waiting for patient response"
-                        >
-                            <ReplyForm
-                                title="Office visit notes:"
-                                onFormSubmit={this.store.sendVisitNotes}
-                                value={this.store.state.office_visit_notes}
-                                style={{ marginBottom: 20 }}
-                            />
-                        </ConditionalText>
-                        <ConditionalText
+                            model={this.store.doctorModel.officeNotes}
+                        />
+                        <EditableColumnComponent
                             title="Prescription:"
-                            isReady={Boolean(this.store.state.medical_history)}
-                            content="waiting for patient response"
-                        >
-                            <ReplyForm
-                                onFormSubmit={this.store.sendPrescription}
-                                value={this.store.state.prescription}
-                            />
-                        </ConditionalText>
+                            model={this.store.doctorModel.prescription}
+                        />
                     </DoctorCol>
                     <InsurerCol>
-                        <ConditionalText
-                            title="Office visit notes"
-                            isReady={Boolean(this.store.state.office_visit_notes)}
-                            content="waiting for doctor office visit notes"
-                        >
-                            {this.store.state.office_visit_notes}
-                        </ConditionalText>
-                        <div>
-                            <b>Prescription:</b>
-                            <p>
-                                <FaLock size="2em" />
-                            </p>
-                        </div>
+                        <ReadonlyColumnComponent
+                            style={{ marginBottom: 20 }}
+                            title="Office visit notes:"
+                            model={this.store.insurerModel.officeNotes}
+                        />
+                        <ReadonlyColumnComponent
+                            title="Prescription:"
+                            model={this.store.insurerModel.prescription}
+                        />
                     </InsurerCol>
                 </CustomRow>
                 <CustomRow>
-                    <InfoCol lg="2">
+                    <InfoCol>
                         <h3>Insurer Info</h3>
                     </InfoCol>
                     <PatientCol>
-                        <ConditionalText
-                            title="Insurer Reply:"
-                            isReady={this.store.state.insurer_reply}
-                            content="wait for insurer reply"
-                        >
-                            {this.store.state.insurer_reply}
-                        </ConditionalText>
+                        <ReadonlyColumnComponent
+                            title="Insurer reply:"
+                            model={this.store.patientModel.insurerReply}
+                        />
                     </PatientCol>
                     <DoctorCol>
-                        <ConditionalText
-                            title="Insurer Reply:"
-                            isReady={this.store.state.insurer_reply}
-                            content="Wait for insurance reply response"
-                        >
-                            <p>{this.store.state.insurer_reply}</p>
-                        </ConditionalText>
+                        <ReadonlyColumnComponent
+                            title="Insurer reply:"
+                            model={this.store.doctorModel.insurerReply}
+                        />
                     </DoctorCol>
                     <InsurerCol>
-                        <ConditionalText
-                            title="Insurer Reply:"
-                            isReady={this.store.state.office_visit_notes}
-                            content="Wait for doctor office visit notes"
-                        >
-                            <ReplyForm
-                                onFormSubmit={this.store.sendInsurerReply}
-                                value={this.store.state.insurer_reply}
-                            />
-                        </ConditionalText>
+                        <EditableColumnComponent
+                            title="Insurer reply:"
+                            model={this.store.insurerModel.insurerReply}
+                        />
                     </InsurerCol>
                 </CustomRow>
             </Container>

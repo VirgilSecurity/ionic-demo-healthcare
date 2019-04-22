@@ -19,7 +19,8 @@ export class IonicAgent {
         this.profileInfo = {
             appId: 'helloworld',
             userId: username,
-            userAuth: password
+            userAuth: password,
+            enrollmentUrl: 'http://localhost:8080/'
         };
         this.sdk = new IonicSdk.ISAgent('https://preview-api.ionic.com/jssdk/latest/');
         this.fetchAssertion = fetchIonicAssertion;
