@@ -1,4 +1,4 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 import { ReadonlyColumnModel } from "../models/ReadonlyColumnModel";
 import { observer } from "mobx-react";
 import { Lock, CloudDownload, WaitingIcon } from "./Icons";
@@ -7,6 +7,7 @@ import { Lock, CloudDownload, WaitingIcon } from "./Icons";
 export interface IReadonlyColumnComponentProps {
     title: string;
     model: ReadonlyColumnModel;
+    style?: CSSProperties;
 }
 
 @observer
@@ -15,9 +16,9 @@ export default class ReadonlyColumnComponent extends React.Component<
 > {
     render() {
         return (
-            <div>
+            <div style={this.props.style}>
                 <b>{this.props.title}</b>
-                {this.renderBody()}
+                <div style={{ overflow: "hidden", wordBreak: "break-all" }}>{this.renderBody()}</div>
             </div>
         );
     }
@@ -25,23 +26,23 @@ export default class ReadonlyColumnComponent extends React.Component<
     private renderBody = () => {
         const { state, value } = this.props.model;
         if (state === "Waiting") {
-            return <p><WaitingIcon />Waiting for user data</p>;
+            return <><WaitingIcon />Waiting for user data</>;
         }
 
         if (state === "Decrypting") {
-            return <p>decrypting</p>;
+            return <>decrypting</>;
         }
 
         if (state === "Ready") {
-            return <p><CloudDownload />{value}</p>;
+            return <><CloudDownload />{value}</>;
         }
 
         if (state === "Unable To Decrypt") {
             return (
-                <p>
+                <>
                     <Lock />
                     Failed to decrypt
-                </p>
+                </>
             );
         }
     };

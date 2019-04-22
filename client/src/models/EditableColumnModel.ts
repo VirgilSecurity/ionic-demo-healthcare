@@ -9,16 +9,17 @@ export interface IEditableColumnModelOptions {
     activateReaction?: () => any;
 }
 
+type EditableColumnStates = | "Waiting"
+| "Editing"
+| "Encrypting"
+| "Sending"
+| "Decrypting"
+| "Ready"
+| "Unable To Decrypt";
+
 export class EditableColumnModel {
     @observable value?: string;
-    @observable state:
-        | "Waiting"
-        | "Editing"
-        | "Encrypting"
-        | "Sending"
-        | "Decrypting"
-        | "Ready"
-        | "Unable To Decrypt" = "Waiting";
+    @observable state: EditableColumnStates = "Waiting";
 
     private sdk: IonicAgent;
     private encryptFor: string;
@@ -36,6 +37,7 @@ export class EditableColumnModel {
 
     @action.bound
     activate(value?: string) {
+        console.log('this.state', this.state);
         if (this.state !== "Waiting") return;
         value ? this.decrypt(value) : this.startEditing();
     }

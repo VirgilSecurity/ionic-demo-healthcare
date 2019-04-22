@@ -111,9 +111,7 @@ export class Store {
             });
     };
 
-    @action.bound
-    reset(field: string) {
-        this.state[field] = undefined;
-        this.connection.updateState(this.state);
+    reset() {
+        this.connection.reset().then(() => document.location.reload());
     }
 }
