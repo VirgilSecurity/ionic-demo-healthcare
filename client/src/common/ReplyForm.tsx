@@ -1,8 +1,8 @@
 import React from "react";
 import FormField from "./FormField";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, InputGroup, FormControl } from "react-bootstrap";
 import { observer } from "mobx-react";
-import { observable, action, toJS } from "mobx";
+import { observable, action } from "mobx";
 
 export interface IReplyFormProps extends React.FormHTMLAttributes<HTMLFormElement> {
     value?: string;
@@ -12,13 +12,7 @@ export interface IReplyFormProps extends React.FormHTMLAttributes<HTMLFormElemen
 @observer
 export default class ReplyForm extends React.Component<IReplyFormProps> {
     @observable isLoading = false;
-    @observable isSubmitted = false;
     field = new FormField(this.props.value)
-
-    constructor(props: IReplyFormProps) {
-        super(props);
-        if (props.value) this.isSubmitted = true;
-    }
 
     @action
     handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -29,7 +23,6 @@ export default class ReplyForm extends React.Component<IReplyFormProps> {
             .then(() => {
                 this.field.submit();
                 this.isLoading = false;
-                this.isSubmitted = true;
             })
             .catch(err => {
                 this.field.invalidate(err);
@@ -37,24 +30,23 @@ export default class ReplyForm extends React.Component<IReplyFormProps> {
             });
     };
 
-    render() {
-        return this.isSubmitted ? this.props.value : this.renderForm();
-    }
 
-    renderForm = () => {
+    render(){
         const { title, value, onFormSubmit, ...props } = this.props;
         return (
             <Form {...props} onSubmit={this.handleSubmit}>
-                <Form.Group controlId="exampleForm.ControlTextarea1">
-                    <Form.Control
+                <InputGroup>
+                    <FormControl
                         required
                         value={this.field.inputValue}
                         onChange={e => this.field.handleChange(e.target.value)}
                     />
-                </Form.Group>
-                <Button type="submit" disabled={this.isLoading}>
-                    {this.isLoading ? "Loading" : "Submit"}
-                </Button>
+                    <InputGroup.Append>
+                        <Button type="submit" disabled={this.isLoading}>
+                            {this.isLoading ? "Loading" : "Submit"}
+                        </Button>
+                    </InputGroup.Append>
+                </InputGroup>
             </Form>
         );
     }

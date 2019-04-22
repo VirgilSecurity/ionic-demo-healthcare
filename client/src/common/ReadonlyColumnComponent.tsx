@@ -1,7 +1,8 @@
 import React from "react";
 import { ReadonlyColumnModel } from "../models/ReadonlyColumnModel";
 import { observer } from "mobx-react";
-import { FaLock } from "react-icons/fa";
+import { Lock, CloudDownload, WaitingIcon } from "./Icons";
+
 
 export interface IReadonlyColumnComponentProps {
     title: string;
@@ -24,7 +25,7 @@ export default class ReadonlyColumnComponent extends React.Component<
     private renderBody = () => {
         const { state, value } = this.props.model;
         if (state === "Waiting") {
-            return <p>waiting</p>;
+            return <p><WaitingIcon />Waiting for user data</p>;
         }
 
         if (state === "Decrypting") {
@@ -32,13 +33,14 @@ export default class ReadonlyColumnComponent extends React.Component<
         }
 
         if (state === "Ready") {
-            return <p>{value}</p>;
+            return <p><CloudDownload />{value}</p>;
         }
 
         if (state === "Unable To Decrypt") {
             return (
                 <p>
-                    <FaLock size="2em" />
+                    <Lock />
+                    Failed to decrypt
                 </p>
             );
         }

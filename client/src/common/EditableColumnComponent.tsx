@@ -2,6 +2,7 @@ import React from 'react';
 import { EditableColumnModel } from '../models/EditableColumnModel';
 import ReplyForm from './ReplyForm';
 import { observer } from 'mobx-react';
+import { WaitingIcon, SpinnerIcon, EditIcon } from './Icons';
 
 export interface IEditableColumnComponentProps {
     title: string;
@@ -24,26 +25,26 @@ export default class EditableColumnComponent extends React.Component<IEditableCo
         const { state, value, send } = this.props.model;
 
         if (state === "Waiting") {
-            return <p>waiting</p>;
+            return <p><WaitingIcon /> Waiting for data</p>;
         }
         if (state === "Editing") {
             return <ReplyForm value={value} onFormSubmit={send}></ReplyForm>
         }
 
         if (state === "Encrypting") {
-            return <p>encrypting</p>
+            return <p><SpinnerIcon /> Encrypting</p>
         }
 
         if (state === "Sending") {
-            return <p>sending</p>
+            return <p><SpinnerIcon /> Sending</p>
         }
 
         if (state === "Decrypting") {
-            return <p>decrypting</p>
+            return <p><SpinnerIcon /> Decrypting</p>
         }
 
         if (state === "Ready") {
-            return <p>{value}</p>
+            return <p><EditIcon />{value}</p>
         }
     }
 }
