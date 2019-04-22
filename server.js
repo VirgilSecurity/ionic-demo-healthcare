@@ -8,6 +8,7 @@ const debug = require('./server/debug');
 const IonicClient = require('./server/ionic/client');
 const UserService = require('./server/ionic/user-service');
 const PREDEFINED_GROUPS = require('./server/ionic/predefined-groups');
+const StateStorage = require('./server/db/state-storage');
 
 dotenv.config();
 
@@ -17,7 +18,7 @@ app.disable('x-powered-by');
 app.use(morgan('dev'));
 app.use(express.json());
 
-let state = {};
+const storage = new StateStorage();
 
 app.post(
   '/register',
@@ -91,8 +92,16 @@ app.post(
   }
 );
 
-app.get('/state', (req, res) => {
-  res.json(state);
+app.get('/state', async (req, res) => {
+    let state;
+    try {
+        state = await storage.getState();
+    } catch (err) {
+        debug('error getting state: %o');
+        res.status(500).json({ error: 'Internal server error '});
+        return;
+    }
+    res.json(state);
 });
 
 app.put(
@@ -105,7 +114,7 @@ app.put(
       checkBody('insurer_reply').not().isEmpty(),
     ], 'At least one property to update must be specified')
   ],
-  (req, res) => {
+  async (req, res) => {
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {
       return res.status(400).json({
@@ -115,31 +124,31 @@ app.put(
     }
 
     const { medical_history, office_visit_notes, prescription, insurer_reply } = req.body;
-    const newState = { medical_history, office_visit_notes, prescription, insurer_reply };
+    let updatedState;
+    try {
+        updatedState = await storage.updateState({ medical_history, office_visit_notes, prescription, insurer_reply });
+    } catch (err) {
+        debug('error updating state: %o', err);
+        res.status(500).json({ error: 'Internal server error' });
+        return;
+    }
 
-    Object.keys(newState).forEach(key => {
-      if (newState[key] !== undefined) {
-        state[key] = newState[key];
-      }
-    });
-
-    res.json(state);
-  }
-)
-;
-app.delete(
-  '/state',
-  (req, res) => {
-    state = {
-        medical_history: undefined,
-        office_visit_notes: undefined,
-        prescription: undefined,
-        insurer_reply: undefined
-      };
-
-    res.json(state);
+    res.json(updatedState);
   }
 );
+
+app.delete('/state', async (req, res) => {
+    let updatedState;
+    try {
+        updatedState = await storage.resetState();
+    } catch (err) {
+        debug('error reseting state: %o', err);
+        res.status(500).json({ error: 'Internal server error' });
+        return;
+    }
+
+    res.json(updatedState);
+});
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client/build')));
