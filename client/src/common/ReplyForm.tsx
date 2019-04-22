@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import FormField, { IFormField } from "./FormField";
-import { Form, Button, Spinner } from "react-bootstrap";
+import React from "react";
+import FormField from "./FormField";
+import { Form, Button } from "react-bootstrap";
 import { observer } from "mobx-react";
 import { observable, action, toJS } from "mobx";
 
@@ -38,7 +38,7 @@ export default class ReplyForm extends React.Component<IReplyFormProps> {
     };
 
     render() {
-        return this.isSubmitted ? this.field.value : this.renderForm();
+        return this.isSubmitted ? this.props.value : this.renderForm();
     }
 
     renderForm = () => {

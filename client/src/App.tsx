@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Store } from "./Store";
 import { observer } from "mobx-react";
-import { Container, Col, Row, ColProps, RowProps } from "react-bootstrap";
+import { Container, Col, Row, ColProps, RowProps, Button } from "react-bootstrap";
 import ReplyForm from "./common/ReplyForm";
 import { ConditionalText } from "./common/ConditionalText";
-import { FaLock, FaFileMedicalAlt } from "react-icons/fa";
+import { FaLock } from "react-icons/fa";
 import { asyncSequence } from './utils';
 import EditableColumnComponent from "./common/EditableColumnComponent";
 import ReadonlyColumnComponent from "./common/ReadonlyColumnComponent";
@@ -33,33 +33,17 @@ class App extends Component {
     store = new Store();
 
     componentDidMount() {
-        this.store.loadData();
         asyncSequence([
             this.store.patient.loadProfile.bind(this.store.patient),
             this.store.doctor.loadProfile.bind(this.store.doctor),
             this.store.insurer.loadProfile.bind(this.store.insurer)
-        ]).then(() => {
-            console.log('All profiles loaded');
-            this.store.patient.encryptText('not for insurer', 'patient_physician')
-            .then(ciphertext => {
-                console.log('Patient encrypted: %s', ciphertext);
-
-                this.store.doctor.decryptText(ciphertext)
-                .then(text => console.log('Doctor decrypted: %s', text))
-                .catch(err => console.error('Doctor could not decrypt: %o', err));
-
-                this.store.insurer.decryptText(ciphertext)
-                .then(text => console.log('Insurer decrypted: %s', text))
-                .catch(err => console.error('Insurer could not decrypt: %o', err));
-            })
-        }).catch(err => {
-            console.error('Error loading profiles: %o', err);
-        });
+        ]).then(this.store.loadData)
     }
 
     render() {
         return (
             <Container>
+                <Button onClick={() => this.store.conntection.reset()}>reset medical</Button>
                 <CustomRow>
                     <PatientCol lg={{ span: 3, offset: 2 }}>
                         <h3>Patient Device</h3>
@@ -93,13 +77,7 @@ class App extends Component {
                         <h3>Doctor Info</h3>
                     </InfoCol>
                     <PatientCol>
-                        <ConditionalText
-                            title="Office Visit Notes:"
-                            isReady={this.store.state.office_visit_notes}
-                            content="waiting for doctor office visit notes"
-                        >
-                            {this.store.state.office_visit_notes}
-                        </ConditionalText>
+                        <ReadonlyColumnComponent title="Office notes" model={this.store.patientModel.officeNotes} />
                         <ConditionalText
                             title="Prescription:"
                             isReady={this.store.state.prescription}
@@ -109,18 +87,7 @@ class App extends Component {
                         </ConditionalText>
                     </PatientCol>
                     <DoctorCol>
-                        <ConditionalText
-                            title="Office visit notes:"
-                            isReady={Boolean(this.store.state.medical_history)}
-                            content="waiting for patient response"
-                        >
-                            <ReplyForm
-                                title="Office visit notes:"
-                                onFormSubmit={this.store.sendVisitNotes}
-                                value={this.store.state.office_visit_notes}
-                                style={{ marginBottom: 20 }}
-                            />
-                        </ConditionalText>
+                        <EditableColumnComponent title="Office visit notes" model={this.store.doctorModel.officeNotes} />
                         <ConditionalText
                             title="Prescription:"
                             isReady={Boolean(this.store.state.medical_history)}

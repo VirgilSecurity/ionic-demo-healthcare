@@ -49,4 +49,10 @@ export class Connection {
             return response.json();
         }).then(({ assertion, user }) => assertion); // ignore "user" property for now
     }
+
+    reset = () => {
+        return fetch('/state', {
+            method: 'DELETE'
+        })
+    }
 }

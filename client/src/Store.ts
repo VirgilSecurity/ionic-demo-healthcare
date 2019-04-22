@@ -1,29 +1,11 @@
 import { observable, action } from "mobx";
 import { Connection, IStateResponse } from './Connnection';
 import { IonicAgent } from './models/IonicAgent';
-import { Doctor } from "./models/Doctor";
-import { Patient } from "./models/Patient";
+import { DoctorModel } from "./models/DoctorModel";
+import { PatientModel } from "./models/PatientModel";
 
 export interface IStoreProps {
 	store?: Store;
-}
-
-export class SdkMock {
-    encryptText(message: string): Promise<string> {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                console.log('resolve');
-                resolve(message.toUpperCase())
-            }, 1000)
-        })
-    }
-    decryptText(message: string): Promise<string> {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(message.toLowerCase())
-            }, 1000)
-        })
-    }
 }
 
 export class Store {
@@ -74,32 +56,34 @@ export class Store {
         "insurer_reply": undefined
     }
 
-    sdkMock = new SdkMock();
+    doctorModel = new DoctorModel(this);
+    patientModel = new PatientModel(this);
 
-    doctorModel = new Doctor(this);
-    patientModel = new Patient(this);
-
-    @action
+    @action.bound
     loadData() {
         this.conntection.fetchState().then(data => {
             this.state = data;
         });
     }
 
-    @action
-    sendMedicalHistory = (value: string) => {
+    @action.bound
+    sendMedicalHistory(value: string) {
         return this.conntection.updateState({ ...this.state, medical_history: value })
             .then(updatedState => {
+                console.log('updated state', updatedState);
                 setTimeout(() => {
                     this.state = updatedState;
                 }, 2000)
+                return value;
             });
     }
 
-    sendVisitNotes = (value: string) => {
+    @action.bound
+    sendVisitNotes(value: string) {
         return this.conntection.updateState({ ...this.state, office_visit_notes: value })
             .then(updatedState => {
                 this.state = updatedState;
+                return value;
             });
     }
 
@@ -115,5 +99,10 @@ export class Store {
             .then(updatedState => {
                 this.state = updatedState;
             });
+    }
+
+    reset(field: string) {
+        this.state[field] = undefined;
+        this.conntection.updateState(this.state);
     }
 }

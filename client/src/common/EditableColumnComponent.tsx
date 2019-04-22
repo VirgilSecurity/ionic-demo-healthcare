@@ -22,6 +22,7 @@ export default class EditableColumnComponent extends React.Component<IEditableCo
 
     private renderBody = () => {
         const { state, value, send } = this.props.model;
+
         if (state === "Waiting") {
             return <p>waiting</p>;
         }
@@ -33,6 +34,9 @@ export default class EditableColumnComponent extends React.Component<IEditableCo
             return <p>encrypting</p>
         }
 
+        if (state === "Sending") {
+            return <p>sending</p>
+        }
 
         if (state === "Decrypting") {
             return <p>decrypting</p>
