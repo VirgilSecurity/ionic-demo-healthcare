@@ -29,38 +29,38 @@ export class SdkMock {
 export class Store {
     conntection = new Connection();
 
-    // patient = new IonicAgent({
-    //     username: 'virgil_patient',
-    //     password: 'password123',
-    //     fetchIonicAssertion: () => this.conntection.registerUser({
-    //         email: 'test_patient@virgilsecurity.com',
-    //         groupName: 'patients',
-    //         firstName: 'Test',
-    //         lastName: 'Patient'
-    //     })
-    // });
+    patient = new IonicAgent({
+        username: 'virgil_patient',
+        password: 'password123',
+        fetchIonicAssertion: () => this.conntection.registerUser({
+            email: 'test_patient@virgilsecurity.com',
+            groupName: 'patients',
+            firstName: 'Test',
+            lastName: 'Patient'
+        })
+    });
 
-    // doctor = new IonicAgent({
-    //     username: 'virgil_doctor',
-    //     password: 'password123',
-    //     fetchIonicAssertion: () => this.conntection.registerUser({
-    //         email: 'test_physician@virgilsecurity.com',
-    //         groupName: 'physicians',
-    //         firstName: 'Test',
-    //         lastName: 'Physician'
-    //     })
-    // });
+    doctor = new IonicAgent({
+        username: 'virgil_doctor',
+        password: 'password123',
+        fetchIonicAssertion: () => this.conntection.registerUser({
+            email: 'test_physician@virgilsecurity.com',
+            groupName: 'physicians',
+            firstName: 'Test',
+            lastName: 'Physician'
+        })
+    });
 
-    // insurer = new IonicAgent({
-    //     username: 'virgil_insurer',
-    //     password: 'password123',
-    //     fetchIonicAssertion: () => this.conntection.registerUser({
-    //         email: 'test_insurer@virgilsecurity.com',
-    //         groupName: 'insurers',
-    //         firstName: 'Test',
-    //         lastName: 'Insurer'
-    //     })
-    // });
+    insurer = new IonicAgent({
+        username: 'virgil_insurer',
+        password: 'password123',
+        fetchIonicAssertion: () => this.conntection.registerUser({
+            email: 'test_insurer@virgilsecurity.com',
+            groupName: 'insurers',
+            firstName: 'Test',
+            lastName: 'Insurer'
+        })
+    });
 
     @observable state: {
         "medical_history"?: string,

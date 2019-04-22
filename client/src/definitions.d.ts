@@ -1,9 +1,10 @@
 declare namespace IonicSdk {
-    interface IAppData {
+    interface IProfileInfo {
         appId: string;
         userId: string;
         userAuth: string;
-        enrollmentUrl: string;
+        enrollmentUrl?: string;
+        deviceId?: string;
     }
 
     interface ISdkResponse {
@@ -14,6 +15,7 @@ declare namespace IonicSdk {
         stringData: string;
         cipher?: 'v1'|'v2';
         attributes?: { [key: string]: string };
+        mutableAttributes?: { [key: string]: string|string[] };
     }
 
     interface IChunkCipherOutput {
@@ -22,11 +24,12 @@ declare namespace IonicSdk {
 
     class ISAgent {
         constructor(sourceUrl: string);
-        enrollUser(appData: IAppData): Promise<ISdkResponse>;
-        loadUser(appData: IAppData): Promise<ISdkResponse>;
+        enrollUser(profileInfo: IProfileInfo): Promise<ISdkResponse>;
+        loadUser(profileInfo: IProfileInfo): Promise<ISdkResponse & { profiles: ({ deviceId: string})[] }>;
         createDevice(ionicAssertion: object): Promise<ISdkResponse>;
         encryptStringChunkCipher(input: IChunkCipherInput): Promise<IChunkCipherOutput>;
         decryptStringChunkCipher(input: IChunkCipherInput): Promise<IChunkCipherOutput>;
+        setActiveProfile(profileInfo): Promise<ISdkResponse>;
     }
 }
 
