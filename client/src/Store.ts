@@ -111,7 +111,7 @@ export class Store {
             });
     };
 
-    reset() {
+    reset = () => {
         this.connection.reset().then(() => document.location.reload());
     }
 }
