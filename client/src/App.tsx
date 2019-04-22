@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import { Store } from "./Store";
 import { observer } from "mobx-react";
-import { Container, Col, Row, ColProps, RowProps, Alert } from "react-bootstrap";
+import { Container, Col, Row, ColProps, RowProps } from "react-bootstrap";
 import ReplyForm from "./common/ReplyForm";
 import { ConditionalText } from "./common/ConditionalText";
-import { FaLock } from "react-icons/fa";
+import { FaLock, FaFileMedicalAlt } from "react-icons/fa";
 import { asyncSequence } from './utils';
+import EditableColumnComponent from "./common/EditableColumnComponent";
+import ReadonlyColumnComponent from "./common/ReadonlyColumnComponent";
 
 const PatientCol: React.FC<ColProps> = props => (
     <Col lg="3" style={{ backgroundColor: "rgba(255, 0, 0, 0.05)", padding: 20 }} {...props} />
@@ -25,21 +27,22 @@ const CustomRow: React.FC<RowProps & React.HTMLAttributes<HTMLDivElement>> = pro
     <Row style={{ borderBottom: "2px solid white" }} {...props} />
 );
 
+
 @observer
 class App extends Component {
     store = new Store();
 
     componentDidMount() {
         this.store.loadData();
-        asyncSequence([
-            this.store.patient.loadProfile.bind(this.store.patient),
-            this.store.doctor.loadProfile.bind(this.store.doctor),
-            this.store.insurer.loadProfile.bind(this.store.insurer)
-        ]).then(() => {
-            console.log('All profiles loaded');
-        }).catch(err => {
-            console.error('Error loading profiles: %o', err);
-        });
+        // asyncSequence([
+        //     this.store.patient.loadProfile.bind(this.store.patient),
+        //     this.store.doctor.loadProfile.bind(this.store.doctor),
+        //     this.store.insurer.loadProfile.bind(this.store.insurer)
+        // ]).then(() => {
+        //     console.log('All profiles loaded');
+        // }).catch(err => {
+        //     console.error('Error loading profiles: %o', err);
+        // });
     }
 
     render() {
@@ -61,23 +64,10 @@ class App extends Component {
                         <h3>Patient Info</h3>
                     </InfoCol>
                     <PatientCol>
-                        <b>Medical history:</b>
-                        <br />
-                        <ReplyForm
-                            onFormSubmit={this.store.sendMedicalHistory}
-                            value={this.store.state.medical_history}
-                        />
+                        <EditableColumnComponent title="Medical history" model={this.store.patientModel.medicalHistory} />
                     </PatientCol>
                     <DoctorCol>
-                        <ConditionalText
-                            title="Medical History:"
-                            isReady={this.store.state.medical_history}
-                            content="waiting for patient response"
-                        >
-
-                            <FaFileMedicalAlt size="2em" style={{ marginRight: 10 }}/>
-                                {this.store.state.medical_history}
-                        </ConditionalText>
+                        <ReadonlyColumnComponent title="Medical history" model={this.store.doctorModel.medicalHistory} />
                     </DoctorCol>
                     <InsurerCol>
                         <b>Medical History:</b>

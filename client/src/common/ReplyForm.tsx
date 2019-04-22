@@ -47,6 +47,7 @@ export default class ReplyForm extends React.Component<IReplyFormProps> {
             <Form {...props} onSubmit={this.handleSubmit}>
                 <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Control
+                        required
                         value={this.field.inputValue}
                         onChange={e => this.field.handleChange(e.target.value)}
                     />
