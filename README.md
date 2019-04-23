@@ -170,6 +170,10 @@ The following environment variables must be defined to run the server:
 | IONIC_API_BASE_URL | https://api.ionic.com | Ionic Management APIs base URL for your tenant |
 | IONIC_TENANT_ID | - | Your Ionic tenant ID |
 | IONIC_API_AUTH_TOKEN | - | Your Ionic API Key Secret Token (for accessing Management API). Must include SCIM User and Group management scopes |
+| AWS_ACCESS_KEY_ID | - | Your AWS Access Key ID |
+| AWS_SECRET_ACCESS_KEY | - | Your AWS Access Secret Key |
+| AWS_DYNAMODB_ENDPOINT | http://localhost:8000 | Your DynamoDB endpoint |
+| AWS_DYNAMODB_TABLE_NAME | IonicDemoState | Name of the configured DynamoDB table |
 
 ### Install dependencies
 
