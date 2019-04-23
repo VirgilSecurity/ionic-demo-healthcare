@@ -64,11 +64,11 @@ app.post(
 
     try {
       samlResponse = buildResponse({
-        privateKey: process.env.PRIVATE_KEY,
+        privateKey: process.env.IONIC_IDP_PRIVATE_KEY,
         userEmail: email,
-        recipientUrl: process.env.ENROLLMENT_ENDPOINT,
-        recipientName: process.env.ASSERTION_CONSUMER_SERVICE,
-        issuer: process.env.IDP_ENTITY_ID
+        recipientUrl: process.env.IONIC_ENROLLMENT_ENDPOINT,
+        recipientName: process.env.IONIC_ASSERTION_CONSUMER_SERVICE,
+        issuer: process.env.IONIC_IDP_ENTITY_ID
       });
       debug('assertion generated');
     } catch (err) {
@@ -80,7 +80,7 @@ app.post(
     debug('getting Ionic assertion');
     let ionicAssertion;
     try {
-      ionicAssertion = await getIonicAssertion(process.env.ENROLLMENT_ENDPOINT, samlResponse);
+      ionicAssertion = await getIonicAssertion(process.env.IONIC_ENROLLMENT_ENDPOINT, samlResponse);
       debug('got Ionic assertion');
     } catch(err) {
       debug('error getting Ionic assertion: %o', err);
