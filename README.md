@@ -152,6 +152,23 @@ Validation error responses also include `errors` property:
 
 Client errors have HTTP status code `400`, Server errors - `500`
 
+## Prerequisites
+
+### Ionic
+
+1. Configure [Enrollment with generated assertion](https://dev.ionic.com/platform/enrollment/generated-assertion) in your Ionic Enrollment server.
+2. Create an _API Key_ in Ionic Dashboard. The key must allow _API access_, _Creating and Reading Users_ and _Reading Groups_.
+3. Create three groups in Ionic Dashboard: _Patients_, _Physicians_ and _Insurers_. You will need to get IDs of these groups and replace the ones defined in [this file](server/ionic/predefined-groups.js) with your appropriate ids.
+4. Create two _Data Marking Values_ for the pre-defined _classification_ attribute: `"patient_physician"` and `"patient_physician_insurer"`.
+5. Create two _Data Policies_:
+    * One that applies to data marked with _classification_ matching *patient_physician* and allows access when the user is in any of the groups _Patients_ or _Physicians_
+    * Another one that applies to data marked with _classification_ matching *patient_physician_insurer* and allows access when the user is in any of the groups _Patients_, _Physicians_ or _Insurers_
+
+### AWS
+
+1. Create an _Access Key_ for your AWS user.
+2. Create a DynamoDB table named "IonicDemoState" (any name will do as long as it matches the one in your environment config below)
+3. Set the _Primary key_ to be the `key` attribute of type `String`. The sort key is not needed.
 
 ## Development
 
@@ -163,17 +180,25 @@ The following environment variables must be defined to run the server:
 
 | Variable Name | Sample Value | Description |
 | ------------- | ------------ | ----------- |
-| IDP_ENTITY_ID | ionic-assertion | Identity provider name configured on your Ionic Enrollment Server. Used for SAML assertion generation |
-| ASSERTION_CONSUMER_SERVICE | IonicEP | Name of the SAML asssertion consumer configured on your Ionic Enrollment Server. Used for SAML assertion generation |
-| ENROLLMENT_ENDPOINT | https://enrollment.ionic.com/.../saml | URL of your Enrollment Server. Used for SAML assertion generation |
-| PRIVATE_KEY | Private Key in PEM format | Private key to use to sign SAML assertions |
+| IONIC_IDP_ENTITY_ID | ionic-assertion | Identity provider name configured on your Ionic Enrollment Server. Used for SAML assertion generation |
+| IONIC_ASSERTION_CONSUMER_SERVICE | IonicEP | Name of the SAML asssertion consumer configured on your Ionic Enrollment Server. Used for SAML assertion generation |
+| IONIC_ENROLLMENT_ENDPOINT | https://enrollment.ionic.com/.../saml | URL of your Ionic Enrollment Server. Used for SAML assertion generation |
+| IONIC_IDP_PRIVATE_KEY | Private Key in PEM format | Private key to use to sign SAML assertions |
 | IONIC_API_BASE_URL | https://api.ionic.com | Ionic Management APIs base URL for your tenant |
 | IONIC_TENANT_ID | - | Your Ionic tenant ID |
 | IONIC_API_AUTH_TOKEN | - | Your Ionic API Key Secret Token (for accessing Management API). Must include SCIM User and Group management scopes |
-| AWS_ACCESS_KEY_ID | - | Your AWS Access Key ID |
-| AWS_SECRET_ACCESS_KEY | - | Your AWS Access Secret Key |
+| AWS_ACCESS_KEY_ID | - | Your AWS Access Key ID. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
+| AWS_SECRET_ACCESS_KEY | - | Your AWS Access Secret Key. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
 | AWS_DYNAMODB_ENDPOINT | http://localhost:8000 | Your DynamoDB endpoint |
 | AWS_DYNAMODB_TABLE_NAME | IonicDemoState | Name of the configured DynamoDB table |
+
+Copy the file `.env.example` under the name `.env`:
+
+```
+cp .env.example .env
+```
+
+and fill in the values.
 
 ### Install dependencies
 
