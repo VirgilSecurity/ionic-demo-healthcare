@@ -8,7 +8,8 @@
     "client": "cd client && npm start",
     "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "start": "cd client && npm run build && cd .. && node server.js"
+    "start": "cd client && npm run build && cd .. && node server.js",
+    "prepare": "cd client && npm install"
   },
   "keywords": [],
   "author": "",
