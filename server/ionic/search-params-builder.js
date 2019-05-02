@@ -1,3 +1,5 @@
+const qs = require('qs');
+
 function isPlainObject(obj) {
   return Object.prototype.toString.call(obj) === '[object Object]';
 }
@@ -23,7 +25,7 @@ function createSearchParamsBuilder(allowedParameters, allowedOperators) {
     const illegalOperators = Object.keys(expression).filter(
       operatorName => allowedOperatorSet.has(operatorName) === false
     );
-  
+
     if (illegalOperators.length > 0) {
       throw new Error(`Illegal filter expression operator(s): ${
         illegalOperators.toString()
@@ -35,24 +37,25 @@ function createSearchParamsBuilder(allowedParameters, allowedOperators) {
 
   return function buildUrlSearchParams(options) {
     const {
-      skip, 
-      limit, 
+      skip,
+      limit,
       attributes,
       searchParams: { or, ...params } = {}
     } = options;
-  
+
     validateSearchParameters(params);
+
     const normalizedParams = {};
     for (const [attributeName, valueOrExpression] of Object.entries(params)) {
       if (isPlainObject(valueOrExpression)) {
         const expression = valueOrExpression;
         validateFilterExpression(expression);
         for (const [operatorName, value] of Object.entries(expression)) {
-          normalizedParams[`${attributeName}${operatorName}`] = value.toString();
+          normalizedParams[`${attributeName}${operatorName}`] = value;
         }
       } else {
         const value = valueOrExpression;
-        normalizedParams[attributeName] = value.toString();
+        normalizedParams[attributeName] = value;
       }
     }
 
@@ -60,14 +63,14 @@ function createSearchParamsBuilder(allowedParameters, allowedOperators) {
       normalizedParams.or = true;
     }
 
-    const result = new URLSearchParams();
+    const result = {};
     for (const [name, value] of Object.entries({ skip, limit, attributes, ...normalizedParams })) {
       if (typeof value !== 'undefined') {
-        result.append(name, value);
+        result[name] = value;
       }
     }
-  
-    return result;
+
+    return qs.stringify(result, { arrayFormat: 'repeat' });
   }
 }
 

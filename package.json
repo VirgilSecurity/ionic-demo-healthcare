@@ -22,6 +22,7 @@
     "express-validator": "^5.3.1",
     "got": "^9.6.0",
     "morgan": "^1.9.1",
+    "qs": "^6.7.0",
     "uuid": "^3.3.2",
     "xml-crypto": "github:vadimavdeev/xml-crypto",
     "xmldom": "^0.1.27"
