@@ -1,5 +1,5 @@
 const debug = require('../debug');
-const PREDEFINED_GROUPS = require('./predefined-groups');
+const PREDEFINED_GROUPS = require('../data/groups.json');
 
 class UserService {
   constructor(ionicClient) {

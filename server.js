@@ -8,7 +8,7 @@ const getIonicAssertion = require('./server/get-ionic-assertion');
 const debug = require('./server/debug');
 const IonicClient = require('./server/ionic/client');
 const UserService = require('./server/ionic/user-service');
-const PREDEFINED_GROUPS = require('./server/ionic/predefined-groups');
+const PREDEFINED_GROUPS = require('./server/data/groups.json');
 const StateStorage = require('./server/db/state-storage');
 
 dotenv.config();

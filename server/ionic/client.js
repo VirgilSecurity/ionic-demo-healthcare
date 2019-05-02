@@ -60,15 +60,36 @@ class IonicClient {
     return response.body;
   }
 
+  async createGroup({ displayName, externalId, memberIds, description }) {
+      const groupData = {
+          schemas: [
+              SCIM_SCHEMA_CORE,
+              SCIM_SCHEMA_IONIC_EXT
+          ],
+          externalId,
+          displayName,
+          members: Array.isArray(memeberIds) ? memberIds.map(memberId => ({ value: memberId })) : undefined,
+          [SCIM_SCHEMA_IONIC_EXT]: {
+              description: description
+          }
+      }
+      const url = this._getUrl('scim/Groups');
+      const response = await this.client.post(url, {
+          body: groupData,
+          json: true
+      });
+      return response.body;
+  }
+
   /**
-   * Available attributes: 
+   * Available attributes:
    * "domainUpn", "email", "enabled", "externalId", "groups", "roles", "createdTs", "updatedTs", "or"
-   * Available operators: 
+   * Available operators:
    * "__contains", "__startswith", "__gte", "__lte", "__ne", "__empty", "__any", "__all"
-   * @param {{ skip: number; limit: number; attributes: string[]; searchParams: Object }}} options 
+   * @param {{ skip: number; limit: number; attributes: string[]; searchParams: Object }}} options
    */
   async findUsers(options = {}) {
-    const searchParams = buildUserSearchParams(options); 
+    const searchParams = buildUserSearchParams(options);
     const url = this._getUrl('scim/Users');
     const response = await this.client.get(url, {
       query: searchParams,
