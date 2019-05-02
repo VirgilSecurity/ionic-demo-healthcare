@@ -1,10 +1,14 @@
 const qs = require('qs');
 
+const FILTER_OPERATORS = [
+    '__contains', '__startswith', '__gte', '__lte', '__between', '__ne', '__empty', '__any', '__all'
+];
+
 function isPlainObject(obj) {
   return Object.prototype.toString.call(obj) === '[object Object]';
 }
 
-function createSearchParamsBuilder(allowedParameters, allowedOperators) {
+function createSearchParamsBuilder(allowedParameters, allowedOperators = FILTER_OPERATORS) {
   const allowedParameterSet = new Set(allowedParameters);
   const allowedOperatorSet = new Set(allowedOperators);
 
