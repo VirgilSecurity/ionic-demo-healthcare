@@ -216,18 +216,26 @@ npm i
 cd ..
 ```
 
-### Run
+### Run in development mode
 
 ```
 npm run dev
 ```
 
-The server will be listening for connections on port `8080`. Any changes to the `server.js` file will cause the server to be restarted automatically.
+The client side will be served on port `3000` and the server will be listening for connections on port `8080`. Any changes to the source code files will cause the server and the client to be restarted automatically.
+
+### Run in production mode
+
+```
+npm start
+```
+
+The server will be listening for connections on port `8080`. The server will also serve the client side now, so it will be avalable at https://localhost:8080 instead of http://localhost:3000.
 
 ### Debug
 
 To see debug logs printed to the console, set the `DEBUG` environment variable to `virgil_ionic`
 
 ```bash
-DEBUG=virgil_ionic npm statrt
+DEBUG=virgil_ionic npm start
 ```

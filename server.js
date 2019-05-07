@@ -1,3 +1,4 @@
+const path = require('path');
 const dotenv = require('dotenv');
 const express = require('express');
 const morgan = require('morgan');
@@ -184,4 +185,6 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.listen(8080);
+app.listen(8080, () => {
+    console.log(`The server is listening on port 8080`);
+});
