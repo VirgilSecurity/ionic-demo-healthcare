@@ -12,6 +12,32 @@ const StateStorage = require('./server/db/state-storage');
 
 dotenv.config();
 
+// check required environment variables
+function validateConfig() {
+    const requiredVars = [
+        'IONIC_IDP_ENTITY_ID',
+        'IONIC_ASSERTION_CONSUMER_SERVICE',
+        'IONIC_ENROLLMENT_ENDPOINT',
+        'IONIC_IDP_PRIVATE_KEY',
+        'IONIC_API_BASE_URL',
+        'IONIC_TENANT_ID',
+        'IONIC_API_AUTH_TOKEN',
+        'AWS_ACCESS_KEY_ID',
+        'AWS_SECRET_ACCESS_KEY',
+        'AWS_DYNAMODB_ENDPOINT',
+        'AWS_DYNAMODB_TABLE_NAME'
+    ];
+
+    const missingVars = requiredVars.filter(name => !(name in process.env));
+    if (missingVars.length > 0) {
+        console.error(`The following environment variables must be set to run the server: ${missingVars.join(', ')}`);
+        process.exit(1);
+    }
+}
+
+validateConfig();
+
+
 const app = express();
 
 app.disable('x-powered-by');
