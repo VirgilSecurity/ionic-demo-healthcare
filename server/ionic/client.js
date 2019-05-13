@@ -9,10 +9,12 @@ const USER_SEARCH_PARAMS = [
 ];
 const GROUP_SEARCH_PARAMS = ['externalId', 'name', 'description', 'createdTs', 'updatedTs'];
 const DATA_MARKINGS_SEARCH_PARAMS = ['name', 'description'];
+const DATA_POLICIES_SEARCH_PARAMS = ['enabled', 'group', 'marking', 'policyId', 'summary', 'user'];
 
 const buildUserSearchParams = searchParamsBuilderFactory(USER_SEARCH_PARAMS);
 const buildGroupSearchParams = searchParamsBuilderFactory(GROUP_SEARCH_PARAMS);
 const buildDataMarkingsSearchParams = searchParamsBuilderFactory(DATA_MARKINGS_SEARCH_PARAMS);
+const buildDataPolicySearchParams = searchParamsBuilderFactory(DATA_POLICIES_SEARCH_PARAMS);
 
 class IonicClient {
   constructor({ authToken, tenantId, baseUrl }) {
@@ -123,6 +125,16 @@ class IonicClient {
   async findDataMarkings(options = {}) {
       const searchParams = buildDataMarkingsSearchParams(options);
       const url = this._getUrl('markings');
+      const response = await this.client.get(url, {
+          query: searchParams,
+          json: true
+      });
+      return response.body;
+  }
+
+  async findDataPolicies(options = {}) {
+      const searchParams = buildDataPolicySearchParams(options);
+      const url = this._getUrl('policies');
       const response = await this.client.get(url, {
           query: searchParams,
           json: true
