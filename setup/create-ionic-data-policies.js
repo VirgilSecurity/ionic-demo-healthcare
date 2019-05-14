@@ -1,5 +1,4 @@
-require('dotenv').config();
-const IonicClient = require('../server/ionic/client');
+const { formatNamesList, reportError } = require('./utils');
 const {
     DataPolicy,
     Attributes,
@@ -25,13 +24,7 @@ const POLICIES = [
     }
 ];
 
-const client = new IonicClient({
-    baseUrl: process.env.IONIC_API_BASE_URL,
-    tenantId: process.env.IONIC_TENANT_ID,
-    authToken: process.env.IONIC_API_AUTH_TOKEN
-});
-
-async function createIonicDataPolicies() {
+async function createIonicDataPolicies(client) {
     const { Resources: existingPolicies } = await client.findDataPolicies({
         searchParams: {
             policyId: { __any: POLICIES.map(p => p.policyId) }
@@ -42,11 +35,11 @@ async function createIonicDataPolicies() {
     const missingPolicies = POLICIES.filter(p => existingPolicyIds.includes(p.policyId) === false);
 
     if (existingPolicies.length > 0) {
-        console.log(`Policies "${existingPolicies.map(p => p.policyId).join('" and "')}" already exist`);
+        console.log(`${formatNamesList(existingPolicies.map(p => p.policyId), 'Policy', 'Policies')} already exist`);
     }
 
     if (missingPolicies.length > 0) {
-        console.log(`Creating policies: "${missingPolicies.map(p => p.policyId).join('" and "')}"`);
+        console.log(`Creating ${formatNamesList(missingPolicies.map(p => p.policyId), 'policy', 'policies')}`);
         const policyRequests = missingPolicies.map(p => {
             return new DataPolicy({
                 policyId: p.policyId,
@@ -66,7 +59,16 @@ async function createIonicDataPolicies() {
 module.exports = createIonicDataPolicies;
 
 if (require.main === module) {
-    createIonicDataPolicies()
+    require('dotenv').config();
+    const IonicClient = require('../server/ionic/client');
+
+    const client = new IonicClient({
+        baseUrl: process.env.IONIC_API_BASE_URL,
+        tenantId: process.env.IONIC_TENANT_ID,
+        authToken: process.env.IONIC_API_AUTH_TOKEN
+    });
+
+    createIonicDataPolicies(client)
     .then(() => console.log('Done!'))
-    .catch(err => console.error('Error creating data policies: %o', err.response ? err.response.body : err));
+    .catch(reportError);
 }

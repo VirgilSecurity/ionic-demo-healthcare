@@ -9,7 +9,8 @@
     "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "start": "NODE_ENV=production cd client && npm run build && cd .. && node server.js",
-    "prepare": "cd client && npm install"
+    "prepare": "cd client && npm install",
+    "setup": "node setup/setup.js"
   },
   "keywords": [],
   "author": "",

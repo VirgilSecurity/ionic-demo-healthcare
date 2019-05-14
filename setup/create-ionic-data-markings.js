@@ -1,15 +1,7 @@
-require('dotenv').config();
-const IonicClient = require('../server/ionic/client');
-
+const { formatNamesList, reportError } = require('./utils');
 const APP_CLASSIFICATION_VALUES = ['patient_physician', 'patient_physician_insurer'];
 
-const client = new IonicClient({
-    baseUrl: process.env.IONIC_API_BASE_URL,
-    tenantId: process.env.IONIC_TENANT_ID,
-    authToken: process.env.IONIC_API_AUTH_TOKEN
-});
-
-async function createIonicDataMarkings() {
+async function createIonicDataMarkings(client) {
     // find "classification" pre-defined data marking
     const classificationMarkingResponse = await client.findDataMarkings({ searchParams: { name: 'classification' }});
     const classificationMarking = classificationMarkingResponse.Resources[0];
@@ -24,7 +16,7 @@ async function createIonicDataMarkings() {
     );
 
     if (missingValueNames.length > 0) {
-        console.log(`Creating classification values: ${missingValueNames.join(' and ')}`);
+        console.log(`Creating classification ${formatNamesList(missingValueNames, 'value', 'values')}`);
         await client.updateDataMarking(
             classificationMarking.id,
             {
@@ -35,14 +27,23 @@ async function createIonicDataMarkings() {
             }
         );
     } else {
-        console.log(`Classification values: ${APP_CLASSIFICATION_VALUES.join(' and ')} already exist`);
+        console.log(`Classification ${formatNamesList(APP_CLASSIFICATION_VALUES, 'value', 'values')} already exist`);
     }
 }
 
 module.exports = createIonicDataMarkings;
 
 if (require.main === module) {
-    createIonicDataMarkings()
+    require('dotenv').config();
+    const IonicClient = require('../server/ionic/client');
+
+    const client = new IonicClient({
+        baseUrl: process.env.IONIC_API_BASE_URL,
+        tenantId: process.env.IONIC_TENANT_ID,
+        authToken: process.env.IONIC_API_AUTH_TOKEN
+    });
+
+    createIonicDataMarkings(client)
     .then(() => console.log('Done!'))
-    .catch(err => console.error('Error getting data markings: %o', err));
+    .catch(reportError);
 }
