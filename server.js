@@ -8,7 +8,7 @@ const getIonicAssertion = require('./server/get-ionic-assertion');
 const debug = require('./server/debug');
 const IonicClient = require('./server/ionic/client');
 const UserService = require('./server/ionic/user-service');
-const PREDEFINED_GROUPS = require('./server/ionic/predefined-groups');
+const PREDEFINED_GROUPS = require('./server/data/groups.json');
 const StateStorage = require('./server/db/state-storage');
 
 dotenv.config();
@@ -23,8 +23,8 @@ function validateConfig() {
         'IONIC_API_BASE_URL',
         'IONIC_TENANT_ID',
         'IONIC_API_AUTH_TOKEN',
-        'AWS_ACCESS_KEY_ID',
-        'AWS_SECRET_ACCESS_KEY',
+        // 'AWS_ACCESS_KEY_ID', // required only when using DynamoDB hosted in AWS
+        // 'AWS_SECRET_ACCESS_KEY', // required only when using DynamoDB hosted in AWS
         'AWS_DYNAMODB_ENDPOINT',
         'AWS_DYNAMODB_TABLE_NAME'
     ];
