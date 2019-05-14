@@ -7,17 +7,17 @@ The Demo App - is a simple web application, that illustrates how distinct roles 
 - Ionic and AWS credentials
 
 #### Ionic credentials
-- Create and configure an [Ionic Account](https://virgil.atlassian.net/wiki/spaces/VI/pages/1079083092/Create+and+Configure+Ionic+Account).
+- Create and configure an [Ionic Account](https://virgil.atlassian.net/wiki/spaces/VI/pages/1079083092/Create+and+Configure+Ionic+Account)
 
 #### AWS credentials
 1. Create an [AWS account](https://portal.aws.amazon.com/billing/signup) for storing encrypted data
-2. Create an _Access Key_ for your AWS user.
+2. Create an _Access Key_ for your AWS user
 3. Create a DynamoDB table named "IonicDemoState" (any name will do as long as it matches the one in your environment config below)
-4. Set the _Primary key_ to be the `key` attribute of type `String`. The sort key is not needed.
+4. Set the _Primary key_ to be the `key` attribute of type `String`. The sort key is not needed
 
 ## Configure and Run the Demo
 
-- clone the Demo application:
+- Clone the Demo application:
 ```
 git clone https://github.com/VirgilSecurity/ionic-demo-healthcare.git
 ```
@@ -35,7 +35,7 @@ run NO_NAME
 ```
 cp .env.example .env
 ```
-- fill in the Ionic and AWS values inside of .env file. The following environment variables must be defined to run the server:
+- Fill in the Ionic and AWS values inside of .env file. The following environment variables must be defined to run the server:
 
 | Variable Name | Sample Value |
 | ------------- | ------------ |
@@ -46,13 +46,13 @@ cp .env.example .env
 | AWS_ACCESS_KEY_ID | Your AWS Access Key ID. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
 | AWS_SECRET_ACCESS_KEY | Your AWS Access Secret Key. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
 
-- install dependencies for the server:
+- Install dependencies for the server:
 
 ```
 npm i
 ```
 
-- install dependencies for the client:
+- Install dependencies for the client:
 
 ```
 cd client
@@ -64,4 +64,4 @@ cd ..
 ```
 npm start
 ```
-- then, browse to http://localhost:8080 to test explore the Demo.
+- Browse to http://localhost:8080 to explore the Demo.
