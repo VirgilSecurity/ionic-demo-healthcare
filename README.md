@@ -12,11 +12,11 @@ First of all, you need to get Ionic and AWS credentials, and then use them to se
 
 ### Ionic
 1. Create and configure an [Ionic Account](https://dashboard.ionic.com). Go through this [guide](https://virgil.atlassian.net/wiki/spaces/VI/pages/1079083092/Create+and+Configure+Ionic+Account) to find out how to do that, as a result, you'll get necessary credentials.
-2. Run the `NO_NAME` script
+2. Run the `NO_NAME` script:
 ```
 run NO_NAME
 ```
-  The scripts:
+  the script:
   - creates three groups in Ionic Dashboard: _Patients_, _Physicians_ and _Insurers_. You will need to get IDs of these groups and replace the ones defined in [this file](server/ionic/predefined-groups.js) with your appropriate ids.
   - creates two _Data Marking Values_ for the pre-defined _classification_ attribute: `"patient_physician"` and `"patient_physician_insurer"`
   - creates two _Data Policies_:
@@ -61,13 +61,13 @@ cp .env.example .env
 
 ## Install dependencies
 
-- First for the server
+- First for the server:
 
 ```
 npm i
 ```
 
-- Then for the client
+- Then for the client:
 
 ```
 cd client
