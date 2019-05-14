@@ -6,10 +6,10 @@ The Demo App - is a simple web application, that illustrates how distinct roles 
 - Node.js >= 10 is required
 - Ionic and AWS credentials
 
-#### Ionic
+#### Ionic credentials
 - Create and configure an [Ionic Account](https://virgil.atlassian.net/wiki/spaces/VI/pages/1079083092/Create+and+Configure+Ionic+Account).
 
-#### AWS
+#### AWS credentials
 1. Create an [AWS account](https://portal.aws.amazon.com/billing/signup) for storing encrypted data
 2. Create an _Access Key_ for your AWS user.
 3. Create a DynamoDB table named "IonicDemoState" (any name will do as long as it matches the one in your environment config below)
@@ -17,12 +17,10 @@ The Demo App - is a simple web application, that illustrates how distinct roles 
 
 ## Configure and Run the Demo
 
-#### Clone the Demo
+- clone the Demo application:
 ```
 git clone https://github.com/VirgilSecurity/ionic-demo-healthcare.git
 ```
-
-#### Configure the Demo
 
 - Run the `NO_NAME` script:
 ```
@@ -39,8 +37,8 @@ cp .env.example .env
 ```
 - fill in the Ionic and AWS values inside of .env file. The following environment variables must be defined to run the server:
 
-| Variable Name | Sample Value | Description |
-| ------------- | ------------ | ----------- |
+| Variable Name | Sample Value |
+| ------------- | ------------ |
 | IONIC_ENROLLMENT_ENDPOINT | URL of your Ionic Enrollment Server. Used for SAML assertion generation |
 | IONIC_IDP_PRIVATE_KEY | Private key to use to sign SAML assertions |
 | IONIC_TENANT_ID | Your Ionic tenant ID |
