@@ -95,6 +95,15 @@ class IonicClient {
     return response.body;
   }
 
+  async createPolicy(policyJson) {
+    const url = this._getUrl(`policies`);
+    const response = await this.client.post(url, {
+        body: policyJson,
+        json: true
+    });
+    return response.body;
+  }
+
   /**
    * Available attributes:
    * "domainUpn", "email", "enabled", "externalId", "groups", "roles", "createdTs", "updatedTs", "or"

@@ -1,7 +1,7 @@
 class DataPolicy {
-    constructor({ id, description, ruleCombiningAlgId, enabled }) {
+    constructor({ policyId, description, ruleCombiningAlgId, enabled }) {
         this.policy = {
-            policyId: id,
+            policyId,
             description,
             ruleCombiningAlgId,
             enabled
