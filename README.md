@@ -170,6 +170,8 @@ Client errors have HTTP status code `400`, Server errors - `500`
 2. Create a DynamoDB table named "IonicDemoState" (any name will do as long as it matches the one in your environment config below)
 3. Set the _Primary key_ to be the `key` attribute of type `String`. The sort key is not needed.
 
+> Tip! You can get most of the above configured automatically by running `npm run setup` in the project root. The only requirement for that is having environment variables set as described in the **Configure environment** section below.
+
 ## Development
 
 Node.js >= 10 is required
@@ -187,8 +189,8 @@ The following environment variables must be defined to run the server:
 | IONIC_API_BASE_URL | https://api.ionic.com | Ionic Management APIs base URL for your tenant |
 | IONIC_TENANT_ID | - | Your Ionic tenant ID |
 | IONIC_API_AUTH_TOKEN | - | Your Ionic API Key Secret Token (for accessing Management API). Must include SCIM User and Group management scopes |
-| AWS_ACCESS_KEY_ID | - | Your AWS Access Key ID. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
-| AWS_SECRET_ACCESS_KEY | - | Your AWS Access Secret Key. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
+| AWS_ACCESS_KEY_ID | - | Your AWS Access Key ID. This is read by the `aws-sdk` to authenticate requests to DynamoDB. Optional when using local DynamoDB |
+| AWS_SECRET_ACCESS_KEY | - | Your AWS Access Secret Key. This is read by the `aws-sdk` to authenticate requests to DynamoDB. Optional when using local DynamoDB |
 | AWS_DYNAMODB_ENDPOINT | http://localhost:8000 | Your DynamoDB endpoint |
 | AWS_DYNAMODB_TABLE_NAME | IonicDemoState | Name of the configured DynamoDB table |
 
