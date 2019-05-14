@@ -6,10 +6,10 @@ The Demo App - is a simple web application, that illustrates how distinct roles 
 - Node.js >= 10 is required
 - Ionic and AWS credentials
 
-### Ionic
+#### Ionic
 - Create and configure an [Ionic Account](https://virgil.atlassian.net/wiki/spaces/VI/pages/1079083092/Create+and+Configure+Ionic+Account).
 
-### AWS
+#### AWS
 1. Create an [AWS account](https://portal.aws.amazon.com/billing/signup) for storing encrypted data
 2. Create an _Access Key_ for your AWS user.
 3. Create a DynamoDB table named "IonicDemoState" (any name will do as long as it matches the one in your environment config below)
@@ -17,12 +17,12 @@ The Demo App - is a simple web application, that illustrates how distinct roles 
 
 ## Configure and Run the Demo
 
-### Clone the Demo
+#### Clone the Demo
 ```
 git clone https://github.com/VirgilSecurity/ionic-demo-healthcare.git
 ```
 
-### Configure the Demo
+#### Configure the Demo
 
 - Run the `NO_NAME` script:
 ```
@@ -41,12 +41,12 @@ cp .env.example .env
 
 | Variable Name | Sample Value | Description |
 | ------------- | ------------ | ----------- |
-| IONIC_ENROLLMENT_ENDPOINT | https://enrollment.ionic.com/.../saml | URL of your Ionic Enrollment Server. Used for SAML assertion generation |
-| IONIC_IDP_PRIVATE_KEY | Private Key in PEM format | Private key to use to sign SAML assertions |
-| IONIC_TENANT_ID | - | Your Ionic tenant ID |
-| IONIC_API_AUTH_TOKEN | - | Your Ionic API Key Secret Token (for accessing Management API). Must include SCIM User and Group management scopes |
-| AWS_ACCESS_KEY_ID | - | Your AWS Access Key ID. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
-| AWS_SECRET_ACCESS_KEY | - | Your AWS Access Secret Key. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
+| IONIC_ENROLLMENT_ENDPOINT | URL of your Ionic Enrollment Server. Used for SAML assertion generation |
+| IONIC_IDP_PRIVATE_KEY | Private key to use to sign SAML assertions |
+| IONIC_TENANT_ID | Your Ionic tenant ID |
+| IONIC_API_AUTH_TOKEN | Your Ionic API Key Secret Token (for accessing Management API). Must include SCIM User and Group management scopes |
+| AWS_ACCESS_KEY_ID | Your AWS Access Key ID. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
+| AWS_SECRET_ACCESS_KEY | Your AWS Access Secret Key. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
 
 - install dependencies for the server:
 
