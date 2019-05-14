@@ -22,14 +22,14 @@ The Demo App - is a simple web application, that illustrates how distinct roles 
 git clone https://github.com/VirgilSecurity/ionic-demo-healthcare.git
 ```
 
-- Run the `NO_NAME` script:
+- Run the `setup` script:
 ```
-run NO_NAME
+npm run setup
 ```
 
-- The `NO_NAME` script created three groups in Ionic Dashboard: _Patients_, _Physicians_ and _Insurers_. Get IDs of these groups and replace the ones defined in [this file](server/ionic/predefined-groups.js) with your appropriate IDs.
+- The `setup` script created three groups in Ionic Dashboard: _Patients_, _Physicians_ and _Insurers_. Get IDs of these groups and replace the ones defined in [this file](server/ionic/predefined-groups.js) with your appropriate IDs.
 
-> The NO_NAME script also created Ionic _Data Marking Values_ and  _Data Policies_ in Ionic Dashboard. The Quickstart guide explains their purpose.
+> The "setup" script also created Ionic _Data Marking Values_ and  _Data Policies_ in Ionic Dashboard. The Quickstart guide explains their purpose.
 
 - Using the command line interface copy the file `.env.example` under the name `.env`:
 ```
@@ -46,19 +46,12 @@ cp .env.example .env
 | AWS_ACCESS_KEY_ID | Your AWS Access Key ID. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
 | AWS_SECRET_ACCESS_KEY | Your AWS Access Secret Key. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
 
-- Install dependencies for the server:
+- Install dependencies:
 
 ```
 npm i
 ```
 
-- Install dependencies for the client:
-
-```
-cd client
-npm i
-cd ..
-```
 -  Run the Demo with the following command:
 
 ```
