@@ -1,6 +1,6 @@
 # Ionic Healthcare Demo
 
-A Demo Application that protects users data and allows access it only a user who has the decryption key. The Demo Application based on Ionic Tech and demonstrates how a Healthcare application can become a HIPAA Compliance.
+The Demo App - is a simple web application, that illustrates how distinct roles within a Customer's application can be defined and used to restrict ePHI access in a HIPAA-compliant manner, the Use Case involves a hypothetical business scenario involving a Patient, Physician or Insurance Provider. Read more in our [quickstart guide](https://virgil.atlassian.net/wiki/spaces/VI/pages/1079083143/Quickstart).
 
 ## Clone the Demo
 ```
@@ -8,17 +8,21 @@ git clone https://github.com/VirgilSecurity/ionic-demo-healthcare.git
 ```
 
 ## Prerequisites
-First of all, you'll need to get Ionic and AWS credentials, and then use them to set up and run the Demo App.
+First of all, you need to get Ionic and AWS credentials, and then use them to set up and run the Demo App.
 
 ### Ionic
-1. Create and configure [Ionic Account](https://dashboard.ionic.com). In order to that, please contact your Ionic representative.
-2. Configure [Enrollment with generated assertion](https://virgil.atlassian.net/wiki/spaces/VI/pages/1045889180/Enrollment+Guide) in your Ionic Enrollment server.
-3. Create an _API Key_ in Ionic Dashboard if you don't have one. The key must allow _API access_, _Creating and Reading Users_ and _Reading Groups_.
-4. Create three groups in Ionic Dashboard: _Patients_, _Physicians_ and _Insurers_. You will need to get IDs of these groups and replace the ones defined in [this file](server/ionic/predefined-groups.js) with your appropriate ids.
-5. Create two _Data Marking Values_ for the pre-defined _classification_ attribute: `"patient_physician"` and `"patient_physician_insurer"`.
-6. Create two _Data Policies_:
+1. Create and configure an [Ionic Account](https://dashboard.ionic.com). Go through this [guide](https://virgil.atlassian.net/wiki/spaces/VI/pages/1079083092/Create+and+Configure+Ionic+Account) to find out how to do that, as a result, you'll get necessary credentials.
+2. Run the `NO_NAME` script
+```
+run NO_NAME
+```
+  The scripts:
+  - creates three groups in Ionic Dashboard: _Patients_, _Physicians_ and _Insurers_. You will need to get IDs of these groups and replace the ones defined in [this file](server/ionic/predefined-groups.js) with your appropriate ids.
+  - creates two _Data Marking Values_ for the pre-defined _classification_ attribute: `"patient_physician"` and `"patient_physician_insurer"`
+  - creates two _Data Policies_:
     * One that applies to data marked with _classification_ matching *patient_physician* and allows access when the user is in any of the groups _Patients_ or _Physicians_
     * Another one that applies to data marked with _classification_ matching *patient_physician_insurer* and allows access when the user is in any of the groups _Patients_, _Physicians_ or _Insurers_
+More information you will fine in the Quickstart guide.
 
 ### AWS
 1. Create an [AWS account](https://portal.aws.amazon.com/billing/signup) for storing encrypted data
