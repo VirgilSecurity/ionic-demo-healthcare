@@ -1,5 +1,5 @@
 import { observable, action } from "mobx";
-import { Connection, IStateResponse } from "./Connnection";
+import { Connection } from "./Connnection";
 import { IonicAgent } from "./models/IonicAgent";
 import { DoctorModel } from "./models/DoctorModel";
 import { PatientModel } from "./models/PatientModel";
@@ -13,11 +13,11 @@ export class Store {
     connection = new Connection();
 
     patient = new IonicAgent({
-        username: "virgil_patient",
+        username: "test_patient",
         password: "password123",
         fetchIonicAssertion: () =>
             this.connection.registerUser({
-                email: "test_patient@virgilsecurity.com",
+                email: "test_patient@healthcaredemo.com",
                 groupName: "patients",
                 firstName: "Test",
                 lastName: "Patient"
@@ -25,11 +25,11 @@ export class Store {
     });
 
     doctor = new IonicAgent({
-        username: "virgil_doctor",
+        username: "test_doctor",
         password: "password123",
         fetchIonicAssertion: () =>
             this.connection.registerUser({
-                email: "test_physician@virgilsecurity.com",
+                email: "test_physician@healthcaredemo.com",
                 groupName: "physicians",
                 firstName: "Test",
                 lastName: "Physician"
@@ -37,11 +37,11 @@ export class Store {
     });
 
     insurer = new IonicAgent({
-        username: "virgil_insurer",
+        username: "test_insurer",
         password: "password123",
         fetchIonicAssertion: () =>
             this.connection.registerUser({
-                email: "test_insurer@virgilsecurity.com",
+                email: "test_insurer@healthcaredemo.com",
                 groupName: "insurers",
                 firstName: "Test",
                 lastName: "Insurer"
