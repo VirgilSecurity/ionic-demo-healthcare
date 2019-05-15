@@ -1,6 +1,6 @@
 # Ionic Healthcare Demo
 
-The Demo App - is a simple web application, that illustrates how distinct roles within a Customer's application can be defined and used to restrict ePHI access in a HIPAA-compliant manner, the Use Case involves a hypothetical business scenario involving a Patient, Physician or Insurance Provider. Read more in our [quickstart guide](https://virgil.atlassian.net/wiki/spaces/VI/pages/1079083143/Quickstart).
+The Demo App is a simple web application that illustrates how distinct roles within a customer's application can be defined and used to restrict ePHI access in a HIPAA-compliant manner. The Demo App is based on use case involving a hypothetical business scenario involving a patient, physician and insurance provider. Read more in our [quickstart guide](https://virgil.atlassian.net/wiki/spaces/VI/pages/1079083143/Quickstart).
 
 ## Prerequisites
 - Node.js >= 10 is required
@@ -10,10 +10,10 @@ The Demo App - is a simple web application, that illustrates how distinct roles 
 - Create and configure an [Ionic Account](https://virgil.atlassian.net/wiki/spaces/VI/pages/1079083092/Create+and+Configure+Ionic+Account)
 
 #### AWS credentials
-1. Create an [AWS account](https://portal.aws.amazon.com/billing/signup) for storing encrypted data
+1. Create an [AWS account](https://portal.aws.amazon.com/billing/signup) to store your app's encrypted data
 2. Create an _Access Key_ for your AWS user
 3. Create a DynamoDB table named "IonicDemoState" (any name will do as long as it matches the one in your environment config below)
-4. Set the _Primary key_ to be the `key` attribute of type `String`. The sort key is not needed
+4. Set the _Primary key_ to be the `key` attribute of type `String`. The sort key is not needed.
 
 ## Configure and Run the Demo
 
@@ -22,7 +22,7 @@ The Demo App - is a simple web application, that illustrates how distinct roles 
 git clone https://github.com/VirgilSecurity/ionic-demo-healthcare.git
 ```
 
-- Using the command line interface copy the file `.env.example` under the name `.env`:
+- Using the command line interface, copy the file `.env.example` under the name `.env`:
 ```
 cp .env.example .env
 ```
@@ -50,7 +50,7 @@ npm run setup
 
 - The `setup` script created three groups in Ionic Dashboard: _Patients_, _Physicians_ and _Insurers_.
 
-> The "setup" script also created Ionic _Data Marking Values_ and  _Data Policies_ in Ionic Dashboard. The Quickstart guide explains their purpose.
+> The "setup" script also created Ionic _Data Marking Values_ and  _Data Policies_ in Ionic Dashboard. To learn more about groups, data markings and data policies, explore the Quickstart guide.
 
 
 -  Run the Demo with the following command:
@@ -58,4 +58,4 @@ npm run setup
 ```
 npm start
 ```
-- Browse to http://localhost:8080 to explore the Demo.
+- Browse to http://localhost:8080 to explore the Demo and see how the Ionic Policy Engine can be used to grant data access via encryption keys to users based on the Data Policy logic.
