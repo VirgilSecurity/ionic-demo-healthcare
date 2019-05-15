@@ -37,22 +37,21 @@ cp .env.example .env
 | AWS_ACCESS_KEY_ID | Your AWS Access Key ID. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
 | AWS_SECRET_ACCESS_KEY | Your AWS Access Secret Key. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
 
+- Install dependencies:
+
+```
+npm install
+```
 
 - Run the `setup` script:
 ```
 npm run setup
 ```
 
-- The `setup` script created three groups in Ionic Dashboard: _Patients_, _Physicians_ and _Insurers_. Get IDs of these groups and replace the ones defined in [this file](server/ionic/predefined-groups.js) with your appropriate IDs.
+- The `setup` script created three groups in Ionic Dashboard: _Patients_, _Physicians_ and _Insurers_.
 
 > The "setup" script also created Ionic _Data Marking Values_ and  _Data Policies_ in Ionic Dashboard. The Quickstart guide explains their purpose.
 
-
-- Install dependencies:
-
-```
-npm i
-```
 
 -  Run the Demo with the following command:
 
