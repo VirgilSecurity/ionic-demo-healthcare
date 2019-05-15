@@ -8,8 +8,15 @@ const getDefaults = () => ({
     params: {
         TableName: process.env.AWS_DYNAMODB_TABLE_NAME
     },
-    credentials: new EnvironmentCredentials('AWS')
+    credentials: isLocalhost(process.env.AWS_DYNAMODB_ENDPOINT)
+        ? undefined
+        : new EnvironmentCredentials('AWS')
 });
+
+function isLocalhost(url) {
+    const hostname = new URL(url).hostname;
+    return hostname === 'localhost' || hostname === '127.0.0.1';
+}
 
 const INITIAL_STATE = {};
 

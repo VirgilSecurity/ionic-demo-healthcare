@@ -8,8 +8,9 @@
     "client": "cd client && npm start",
     "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "start": "NODE_ENV=production cd client && npm run build && cd .. && node server.js",
-    "prepare": "cd client && npm install"
+    "start": "cd client && npm run build && cd .. && NODE_ENV=production node server.js",
+    "prepare": "cd client && npm install",
+    "setup": "node setup/setup.js"
   },
   "keywords": [],
   "author": "",
@@ -22,8 +23,9 @@
     "express-validator": "^5.3.1",
     "got": "^9.6.0",
     "morgan": "^1.9.1",
+    "qs": "^6.7.0",
     "uuid": "^3.3.2",
-    "xml-crypto": "github:vadimavdeev/xml-crypto",
+    "xml-crypto": "^1.4.0",
     "xmldom": "^0.1.27"
   },
   "devDependencies": {
