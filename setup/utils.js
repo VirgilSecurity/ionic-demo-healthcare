@@ -4,7 +4,7 @@ function formatNamesList(names, nameSingular, namePlural) {
     }
 
     if (names.length === 1) {
-        return `${nameSingular} ${names.toString()}`;
+        return `${nameSingular} "${names.toString()}"`;
     }
 
     if (names.length === 2) {

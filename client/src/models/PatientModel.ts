@@ -5,7 +5,7 @@ import { ReadonlyColumnModel } from "./ReadonlyColumnModel";
 export class PatientModel {
     medicalHistory = new EditableColumnModel({
         sdk: this.store.patient,
-        encryptFor:  "patient_physician",
+        classification:  "Medical History",
         onSubmit: this.store.sendMedicalHistory,
         valueReaction: () => this.store.state.medical_history,
         activateReaction: () => this.store.state

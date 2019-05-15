@@ -1,9 +1,9 @@
 import { observable, action, reaction } from "mobx";
-import { IonicAgent } from "./IonicAgent";
+import { IonicAgent, DataClassification } from "./IonicAgent";
 
 export interface IEditableColumnModelOptions {
     sdk: IonicAgent;
-    encryptFor: string;
+    classification: DataClassification;
     onSubmit: (message: string) => Promise<string>;
     valueReaction: () => string | undefined;
     activateReaction?: () => any;
@@ -22,15 +22,15 @@ export class EditableColumnModel {
     @observable state: EditableColumnStates = "Waiting";
 
     private sdk: IonicAgent;
-    private encryptFor: string;
+    private classification: DataClassification;
     private onSubmit: (message: string) => Promise<string>;
 
 
     constructor(options: IEditableColumnModelOptions) {
-        const { sdk, encryptFor, onSubmit, valueReaction, activateReaction } = options;
+        const { sdk, classification, onSubmit, valueReaction, activateReaction } = options;
         this.sdk = sdk;
         this.onSubmit = onSubmit;
-        this.encryptFor = encryptFor;
+        this.classification = classification;
         reaction(valueReaction, data => this.activate(data));
         if (activateReaction) reaction(activateReaction, this.startEditing);
     }
@@ -52,7 +52,7 @@ export class EditableColumnModel {
     encrypt(message: string) {
         this.state = "Encrypting";
         return this.sdk
-            .encryptText(message, this.encryptFor)
+            .encryptText(message, this.classification)
             .then(encryptedMessage => {
                 this.state = "Sending";
                 return encryptedMessage;

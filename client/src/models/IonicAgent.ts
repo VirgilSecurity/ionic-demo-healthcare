@@ -6,7 +6,7 @@ export interface IonicAgentParams {
     fetchIonicAssertion: () => Promise<object>;
 }
 
-export type DataClassification = 'patient_physician'|'patient_physician_insurer';
+export type DataClassification = 'Medical History'|'Office Visit Notes'|'Prescription Order'|'Insurance Reply';
 
 const ActiveProfileMutex = new Mutex();
 
