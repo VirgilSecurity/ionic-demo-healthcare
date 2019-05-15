@@ -43,7 +43,8 @@ const Attributes = {
         classification: { category: 'resource', id: 'classification' }
     },
     subject: {
-        group: { category: 'subject', id: 'group' }
+        group: { category: 'subject', id: 'group' },
+        groupName: { category: 'subject', id: 'group-name' }
     }
 };
 
