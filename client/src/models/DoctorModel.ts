@@ -9,7 +9,7 @@ export class DoctorModel {
     });
     officeNotes = new EditableColumnModel({
         sdk: this.store.doctor,
-        encryptFor:  "patient_physician",
+        classification:  "Office Visit Notes",
         onSubmit: this.store.sendVisitNotes,
         valueReaction: () => this.store.state.office_visit_notes,
         activateReaction: () => this.medicalHistory.state === "Ready"
@@ -17,7 +17,7 @@ export class DoctorModel {
 
     prescription = new EditableColumnModel({
         sdk: this.store.doctor,
-        encryptFor: "patient_physician_insurer",
+        classification: "Prescription Order",
         onSubmit: this.store.sendPrescription,
         valueReaction: () => this.store.state.prescription,
         activateReaction: () => this.medicalHistory.state === "Ready"

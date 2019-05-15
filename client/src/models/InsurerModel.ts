@@ -18,10 +18,10 @@ export class InsurerModel {
 
     insurerReply = new EditableColumnModel({
         sdk: this.store.insurer,
-        encryptFor: "patient_physician_insurer",
+        classification: "Insurance Reply",
         onSubmit: this.store.sendInsurerReply,
         valueReaction: () => this.store.state.insurer_reply,
-        activateReaction: () => this.prescription.state === "Ready"
+        activateReaction: () => this.officeNotes.state === "Ready"
     });
 
     constructor(readonly store: Store) {}

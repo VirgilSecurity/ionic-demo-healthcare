@@ -1,5 +1,5 @@
 const { formatNamesList, reportError } = require('./utils');
-const APP_CLASSIFICATION_VALUES = ['patient_physician', 'patient_physician_insurer'];
+const { APP_CLASSIFICATION_VALUES } = require('./app-data');
 
 async function createIonicDataMarkings(client) {
     // find "classification" pre-defined data marking

@@ -1,5 +1,5 @@
 const { formatNamesList, reportError } = require('./utils');
-const APP_GROUP_NAMES = ['Patients', 'Physicians', 'Insurers'];
+const { APP_GROUP_NAMES } = require('./app-data');
 
 async function createIonicGroups(client) {
     const existingGroupsResponse = await client.findGroups({
