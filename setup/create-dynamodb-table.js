@@ -1,4 +1,4 @@
-const { reportError } = require('./utils');
+const { reportError, isLocalhost } = require('./utils');
 const { DynamoDB, EnvironmentCredentials } = require('aws-sdk');
 
 function createDynamoDbTable() {
@@ -16,7 +16,7 @@ function createDynamoDbTable() {
         endpoint: process.env.AWS_DYNAMODB_ENDPOINT
     };
 
-    if (!isLocalNetworkUrl(process.env.AWS_DYNAMODB_ENDPOINT)) {
+    if (!isLocalhost(process.env.AWS_DYNAMODB_ENDPOINT)) {
         config.credentials = new EnvironmentCredentials('AWS');
     }
 
@@ -45,11 +45,6 @@ function createDynamoDbTable() {
             resolve(data);
         })
     });
-}
-
-function isLocalNetworkUrl(url) {
-    const hostname = new URL(url).hostname;
-    return hostname === 'localhost' || hostname === '127.0.0.1';
 }
 
 module.exports = createDynamoDbTable;

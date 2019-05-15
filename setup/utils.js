@@ -18,8 +18,13 @@ function reportError(err) {
     console.error('Something went wrong: %o', err.response ? err.response.body : err);
 }
 
+function isLocalhost(url) {
+    const hostname = new URL(url).hostname;
+    return hostname === 'localhost' || hostname === '127.0.0.1';
+}
 
 module.exports = {
     formatNamesList,
-    reportError
+    reportError,
+    isLocalhost
 };
