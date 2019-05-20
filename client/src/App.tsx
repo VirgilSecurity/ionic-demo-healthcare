@@ -9,7 +9,7 @@ import ReadonlyColumnComponent from "./components/ReadonlyColumnComponent";
 const PatientCol: React.FC<ColProps & React.HTMLAttributes<HTMLDivElement>> = props => (
     <Col lg="3" style={{ backgroundColor: "rgba(255, 0, 0, 0.05)", padding: 20 }} {...props} />
 );
-const DoctorCol: React.FC<ColProps & React.HTMLAttributes<HTMLDivElement>> = props => (
+const PhysicianCol: React.FC<ColProps & React.HTMLAttributes<HTMLDivElement>> = props => (
     <Col lg="3" style={{ backgroundColor: "rgba(0, 255, 0, 0.05)", padding: 20 }} {...props} />
 );
 const InsurerCol: React.FC<ColProps & React.HTMLAttributes<HTMLDivElement>> = props => (
@@ -31,7 +31,7 @@ class App extends Component {
     componentDidMount() {
         asyncSequence([
             this.store.patient.loadProfile.bind(this.store.patient),
-            this.store.doctor.loadProfile.bind(this.store.doctor),
+            this.store.physician.loadProfile.bind(this.store.physician),
             this.store.insurer.loadProfile.bind(this.store.insurer)
         ]).then(this.store.loadData);
     }
@@ -46,9 +46,9 @@ class App extends Component {
                     <PatientCol>
                         <h3>Patient Device</h3>
                     </PatientCol>
-                    <DoctorCol>
-                        <h3>Doctor Device</h3>
-                    </DoctorCol>
+                    <PhysicianCol>
+                        <h3>Physician Device</h3>
+                    </PhysicianCol>
                     <InsurerCol>
                         <h3>Insurer Device</h3>
                     </InsurerCol>
@@ -63,12 +63,12 @@ class App extends Component {
                             model={this.store.patientModel.medicalHistory}
                         />
                     </PatientCol>
-                    <DoctorCol>
+                    <PhysicianCol>
                         <ReadonlyColumnComponent
                             title="Medical history:"
-                            model={this.store.doctorModel.medicalHistory}
+                            model={this.store.physicianModel.medicalHistory}
                         />
-                    </DoctorCol>
+                    </PhysicianCol>
                     <InsurerCol>
                         <ReadonlyColumnComponent
                             title="Medical history:"
@@ -78,7 +78,7 @@ class App extends Component {
                 </CustomRow>
                 <CustomRow>
                     <InfoCol>
-                        <h3>Doctor Info</h3>
+                        <h3>Physician Info</h3>
                     </InfoCol>
                     <PatientCol>
                         <ReadonlyColumnComponent
@@ -91,17 +91,17 @@ class App extends Component {
                             model={this.store.patientModel.prescription}
                         />
                     </PatientCol>
-                    <DoctorCol>
+                    <PhysicianCol>
                         <EditableColumnComponent
                             style={{ marginBottom: 20 }}
                             title="Office visit notes:"
-                            model={this.store.doctorModel.officeNotes}
+                            model={this.store.physicianModel.officeNotes}
                         />
                         <EditableColumnComponent
                             title="Prescription:"
-                            model={this.store.doctorModel.prescription}
+                            model={this.store.physicianModel.prescription}
                         />
-                    </DoctorCol>
+                    </PhysicianCol>
                     <InsurerCol>
                         <ReadonlyColumnComponent
                             style={{ marginBottom: 20 }}
@@ -124,12 +124,12 @@ class App extends Component {
                             model={this.store.patientModel.insurerReply}
                         />
                     </PatientCol>
-                    <DoctorCol>
+                    <PhysicianCol>
                         <ReadonlyColumnComponent
                             title="Insurer reply:"
-                            model={this.store.doctorModel.insurerReply}
+                            model={this.store.physicianModel.insurerReply}
                         />
-                    </DoctorCol>
+                    </PhysicianCol>
                     <InsurerCol>
                         <EditableColumnComponent
                             title="Insurer reply:"

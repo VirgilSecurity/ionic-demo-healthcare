@@ -2,13 +2,13 @@ import { Store } from "../Store";
 import { EditableColumnModel } from "./EditableColumnModel";
 import { ReadonlyColumnModel } from "./ReadonlyColumnModel";
 
-export class DoctorModel {
+export class PhysicianModel {
     medicalHistory = new ReadonlyColumnModel({
-        sdk: this.store.doctor,
+        sdk: this.store.physician,
         valueReaction: () => this.store.state.medical_history
     });
     officeNotes = new EditableColumnModel({
-        sdk: this.store.doctor,
+        sdk: this.store.physician,
         classification:  "Office Visit Notes",
         onSubmit: this.store.sendVisitNotes,
         valueReaction: () => this.store.state.office_visit_notes,
@@ -16,7 +16,7 @@ export class DoctorModel {
     });
 
     prescription = new EditableColumnModel({
-        sdk: this.store.doctor,
+        sdk: this.store.physician,
         classification: "Prescription Order",
         onSubmit: this.store.sendPrescription,
         valueReaction: () => this.store.state.prescription,
@@ -24,7 +24,7 @@ export class DoctorModel {
     });
 
     insurerReply = new ReadonlyColumnModel({
-        sdk: this.store.doctor,
+        sdk: this.store.physician,
         valueReaction: () => this.store.state.insurer_reply
     });
 

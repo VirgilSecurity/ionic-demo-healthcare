@@ -1,7 +1,7 @@
 import { observable, action } from "mobx";
 import { Connection } from "./Connnection";
 import { IonicAgent } from "./models/IonicAgent";
-import { DoctorModel } from "./models/DoctorModel";
+import { PhysicianModel } from "./models/PhysicianModel";
 import { PatientModel } from "./models/PatientModel";
 import { InsurerModel } from "./models/InsurerModel";
 
@@ -24,8 +24,8 @@ export class Store {
             })
     });
 
-    doctor = new IonicAgent({
-        username: "test_doctor",
+    physician = new IonicAgent({
+        username: "test_physician",
         password: "password123",
         fetchIonicAssertion: () =>
             this.connection.registerUser({
@@ -60,7 +60,7 @@ export class Store {
         insurer_reply: undefined
     };
 
-    doctorModel = new DoctorModel(this);
+    physicianModel = new PhysicianModel(this);
     patientModel = new PatientModel(this);
     insurerModel = new InsurerModel(this);
 
