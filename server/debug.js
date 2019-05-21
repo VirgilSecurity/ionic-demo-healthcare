@@ -1,2 +1,2 @@
-const debug = require('debug')('virgil_ionic');
+const debug = require('debug')('healthcare_demo');
 module.exports = debug;

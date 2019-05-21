@@ -23,7 +23,7 @@ declare namespace IonicSdk {
     }
 
     class ISAgent {
-        constructor(sourceUrl: string);
+        constructor(sourceUrl?: string);
         enrollUser(profileInfo: IProfileInfo): Promise<ISdkResponse>;
         loadUser(profileInfo: IProfileInfo): Promise<ISdkResponse & { profiles: ({ deviceId: string})[] }>;
         createDevice(ionicAssertion: object): Promise<ISdkResponse>;
