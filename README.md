@@ -1,6 +1,6 @@
 # Ionic Healthcare Demo
 
-The Demo App is a simple web application that illustrates how distinct roles within a customer's application can be defined and used to restrict ePHI access in a HIPAA-compliant manner. The Demo App is based on use case involving a hypothetical business scenario involving a patient, physician and insurance provider. Read more in our [quickstart guide](https://virgil.atlassian.net/wiki/spaces/VI/pages/1079083143/Quickstart).
+The Demo App is a simple web application that illustrates how distinct roles within a customer's application can be defined and used to restrict ePHI access in a HIPAA-compliant manner. The Demo App is based on use case involving a hypothetical business scenario involving a patient, physician and insurance provider. Read more in our [quickstart guide](https://virgil.atlassian.net/wiki/spaces/VI/pages/1086685216/Healthcare+Quickstart+Guide).
 
 ## Prerequisites
 - Node.js >= 10 is required
@@ -11,10 +11,8 @@ The Demo App is a simple web application that illustrates how distinct roles wit
 
 #### AWS credentials
 1. Create an [AWS account](https://portal.aws.amazon.com/billing/signup) to store your app's encrypted data
-2. Create an _Access Key_ for your AWS user
-3. Create a DynamoDB table named "IonicDemoState" (any name will do as long as it matches the one in your environment config below)
-4. Set the _Primary key_ to be the `key` attribute of type `String`. The sort key is not needed.
-
+2. Create an _Access Key_ for your AWS user. Use this guide to [get your AWS Security Credentials](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys).
+ 
 ## Configure and Run the Demo
 
 - Clone the Demo application:
