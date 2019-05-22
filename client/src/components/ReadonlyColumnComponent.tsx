@@ -18,9 +18,13 @@ export default class ReadonlyColumnComponent extends React.Component<
         return (
             <div style={this.props.style}>
                 <b>{this.props.title}</b>
-                <div style={{ overflow: "hidden", wordBreak: "break-all" }}>{this.renderBody()}</div>
+                <div style={{ overflow: "hidden", wordBreak: "break-all", color: this.getColor() }}>{this.renderBody()}</div>
             </div>
         );
+    }
+
+    private getColor = () => {
+        return this.props.model.state === 'Unable To Decrypt' ? '#EE3333' : 'inherit';
     }
 
     private renderBody = () => {
