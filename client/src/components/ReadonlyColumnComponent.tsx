@@ -45,7 +45,7 @@ export default class ReadonlyColumnComponent extends React.Component<
             return (
                 <>
                     <Lock />
-                    Failed to decrypt
+                    Access denied
                 </>
             );
         }
