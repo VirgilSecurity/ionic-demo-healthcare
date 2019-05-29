@@ -18,16 +18,9 @@ async function getIonicAssertion(enrollmentUrl, samlResponseXml) {
     'X-Ionic-Reg-Uidauth': enrollmentResponse.headers['x-ionic-reg-uidauth'],
     'X-Ionic-Reg-Stoken': enrollmentResponse.headers['x-ionic-reg-stoken'],
     'X-Ionic-Reg-Ionic-API-Urls': enrollmentResponse.headers['x-ionic-reg-ionic-url'],
-    'X-Ionic-Reg-Enrollment-Tag': enrollmentResponse.headers['x-ionic-reg-enrollment-tag']
+    'X-Ionic-Reg-Enrollment-Tag': enrollmentResponse.headers['x-ionic-reg-enrollment-tag'],
+    'X-Ionic-Reg-Pubkey':  enrollmentResponse.headers['x-ionic-reg-pubkey']
   };
-
-  const rsaPubKeyUrl = enrollmentResponse.headers['x-ionic-reg-pubkey-url'];
-  debug(`fetching Enrollment server public key from ${rsaPubKeyUrl}`);
-  const pubKeyResponse = await got(rsaPubKeyUrl);
-  debug(`public key response status: ${pubKeyResponse.statusCode}`);
-  const rsaPubKey = pubKeyResponse.body.replace(/[\s|\n]/, '');
-
-  ionicAssertion['X-Ionic-Reg-Pubkey'] = rsaPubKey;
   return ionicAssertion;
 }
 
