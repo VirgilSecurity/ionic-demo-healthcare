@@ -13,11 +13,7 @@ class App extends Component {
     store = new Store();
 
     componentDidMount() {
-        asyncSequence([
-            this.store.patient.loadProfile.bind(this.store.patient),
-            this.store.physician.loadProfile.bind(this.store.physician),
-            this.store.insurer.loadProfile.bind(this.store.insurer)
-        ]).then(this.store.loadData);
+       this.store.loadData();
     }
 
     render() {

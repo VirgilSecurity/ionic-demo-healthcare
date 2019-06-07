@@ -31,14 +31,8 @@ export class EditableColumnModel {
         this.sdk = sdk;
         this.onSubmit = onSubmit;
         this.classification = classification;
-        reaction(valueReaction, data => this.activate(data));
-        if (activateReaction) reaction(activateReaction, this.startEditing);
-    }
-
-    @action.bound
-    activate(value?: string) {
-        if (this.state !== "Waiting") return;
-        value ? this.decrypt(value) : this.startEditing();
+        // reaction(valueReaction, data => this.activate(data));
+        // if (activateReaction) reaction(activateReaction, this.startEditing);
     }
 
     @action.bound

@@ -9,20 +9,16 @@ export interface IStoreProps {
     store?: Store;
 }
 
-export class Store {
-    connection = new Connection();
+export enum Device {
+    Patient,
+    Physician,
+    Insurer,
+}
 
-    patient = new IonicAgent({
-        username: "test_patient",
-        password: "password123",
-        fetchIonicAssertion: () =>
-            this.connection.registerUser({
-                email: "test_patient@healthcaredemo.com",
-                groupName: "patients",
-                firstName: "Test",
-                lastName: "Patient"
-            })
-    });
+export class Store {
+    @observable activeDevice: Device | null = null;
+
+    connection = new Connection();
 
     physician = new IonicAgent({
         username: "test_physician",
@@ -110,6 +106,11 @@ export class Store {
                 return value;
             });
     };
+
+    @action.bound
+    setActiveDevice(device: Device) {
+        this.activeDevice = device;
+    }
 
     reset = () => {
         this.connection.reset().then(() => document.location.reload());

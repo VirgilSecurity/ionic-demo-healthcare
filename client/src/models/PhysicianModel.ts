@@ -1,6 +1,7 @@
 import { Store } from "../Store";
 import { EditableColumnModel } from "./EditableColumnModel";
 import { ReadonlyColumnModel } from "./ReadonlyColumnModel";
+import { computed } from "mobx";
 
 export class PhysicianModel {
     medicalHistory = new ReadonlyColumnModel({
