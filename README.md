@@ -27,7 +27,7 @@ cp .env.example .env
 ```
 - Fill in the Ionic and AWS values inside of .env file. The following environment variables must be defined to run the server:
 
-| Variable Name | Sample Value |
+| Variable Name | Description |
 | ------------- | ------------ |
 | IONIC_ENROLLMENT_ENDPOINT | URL of your Ionic Enrollment Server. Used for SAML assertion generation |
 | IONIC_IDP_PRIVATE_KEY | Private key to use to sign SAML assertions |
