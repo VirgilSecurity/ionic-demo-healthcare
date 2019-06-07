@@ -25,7 +25,6 @@ export class ReadonlyColumnModel {
     @action
     decrypt(encryptedMessage: string) {
         this.state = "Decrypting";
-        console.log('encryptedMessage', encryptedMessage);
         this.sdk.decryptText(encryptedMessage).then(message => {
             this.state = "Ready";
             this.value = message;

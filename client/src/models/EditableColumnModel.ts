@@ -37,7 +37,6 @@ export class EditableColumnModel {
 
     @action.bound
     activate(value?: string) {
-        console.log('this.state', this.state);
         if (this.state !== "Waiting") return;
         value ? this.decrypt(value) : this.startEditing();
     }
