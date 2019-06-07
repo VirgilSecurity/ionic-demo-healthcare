@@ -6,11 +6,11 @@ The Demo App is a simple web application that illustrates how distinct roles wit
 - Node.js >= 10 is required
 - Ionic and AWS credentials
 
-#### Ionic credentials
+### Ionic credentials
 - [Create and configure an Ionic Account](https://virgil.atlassian.net/wiki/spaces/VI/pages/1079083092/Create+and+Configure+Ionic+Account)
 - [Configure the Ionic Enrollment service to support a SAML Assertions](https://virgil.atlassian.net/wiki/spaces/VI/pages/1107263521/Configuring+an+Enrollment+Server+to+Support+a+SAML+Assertions)
 
-#### AWS credentials
+### AWS credentials
 1. Create an [AWS account](https://portal.aws.amazon.com/billing/signup) to store your app's encrypted data
 2. Create an _Access Key_ for your AWS user. Use this guide to [get your AWS Security Credentials](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys).
  
