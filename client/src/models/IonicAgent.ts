@@ -69,7 +69,7 @@ export class IonicAgent {
     private getIonicAssertion(samlResponseXml: string) {
         console.log('Sending SAML response to enrollemnt url');
         return fetch(this.profileInfo.enrollmentUrl, {
-            mode: 'no-cors',
+            mode: 'cors',
             method: 'POST',
             headers: {
                 'expect': '100-continue',
@@ -77,15 +77,13 @@ export class IonicAgent {
             body: new URLSearchParams({ SAMLResponse: samlResponseXml })
         }).then(enrollmentResponse => {
             console.log(`Enrollment response: ${enrollmentResponse.status}`);
-
             const ionicAssertion = {
-                'X-Ionic-Reg-Uidauth': enrollmentResponse.headers['X-Ionic-Reg-Uidauth'],
-                'X-Ionic-Reg-Stoken': enrollmentResponse.headers['X-Ionic-Reg-Stoken'],
-                'X-Ionic-Reg-Ionic-API-Urls': enrollmentResponse.headers['X-Ionic-Reg-Ionic-Url'],
-                'X-Ionic-Reg-Enrollment-Tag': enrollmentResponse.headers['X-Ionic-Reg-Enrollment-Tag'],
-                'X-Ionic-Reg-Pubkey': enrollmentResponse.headers['X-Ionic-Reg-Pubkey']
+                'X-Ionic-Reg-Uidauth': enrollmentResponse.headers.get('X-Ionic-Reg-Uidauth'),
+                'X-Ionic-Reg-Stoken': enrollmentResponse.headers.get('X-Ionic-Reg-Stoken'),
+                'X-Ionic-Reg-Ionic-API-Urls': enrollmentResponse.headers.get('X-Ionic-Reg-Ionic-API-Urls'),
+                'X-Ionic-Reg-Enrollment-Tag': enrollmentResponse.headers.get('X-Ionic-Reg-Enrollment-Tag'),
+                'X-Ionic-Reg-Pubkey': enrollmentResponse.headers.get('X-Ionic-Reg-Pubkey')
             };
-
             return ionicAssertion;
         });
     }
