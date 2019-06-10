@@ -22,7 +22,8 @@ export default class IPhoneCover extends React.Component {
                         top: "10%",
                         left: "8%",
                         right: "8%",
-                        bottom: "8%"
+                        bottom: "8%",
+                        padding: '20px'
                     }}
                 >
                     {children}

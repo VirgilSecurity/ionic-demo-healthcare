@@ -2,52 +2,56 @@ import React from "react";
 import EncryptionFieldComponent from "./components/EncryptionFieldComponent";
 import DecryptionFieldComponent from "./components/DecryptionFieldComponent";
 import { IStateResponse } from "./Connection";
-import { EditableColumnModel } from "./models/EncryptionField";
-import { Store } from "./Store";
-import { ReadonlyColumnModel } from "./models/DecryptionField";
+import { EncryptionColumnModel } from "./models/EncryptionField";
+import { DecryptionFieldModel } from "./models/DecryptionField";
+import { DataStore } from "./models/DataStore";
 
 export interface IPatientDeviceProps {
-    store: Store;
+    model: DataStore;
     data: IStateResponse;
 }
 
 export default class PatientDevice extends React.Component<IPatientDeviceProps> {
     render() {
         const { data } = this.props;
-        const medicalHistory = new EditableColumnModel(
+        const medicalHistory = new EncryptionColumnModel(
             {
-                sdk: this.props.store.patientSdk,
+                sdk: this.props.model.sdk,
                 classification: "Medical History",
-                onSubmit: this.props.store.sendMedicalHistory
+                onSubmit: this.props.model.sendMedicalHistory
             },
             data.medical_history
         );
 
-        const officeNotes = new ReadonlyColumnModel(
-            this.props.store.patientSdk,
-            data.office_visit_notes
-        );
+        const officeNotes = new DecryptionFieldModel(this.props.model.sdk, data.office_visit_notes);
+
+        const prescription = new DecryptionFieldModel(this.props.model.sdk, data.prescription);
+
+        const insurerReply = new DecryptionFieldModel(this.props.model.sdk, data.insurer_reply);
 
         return (
-            <div>
-                <EncryptionFieldComponent title="Medical history:" model={medicalHistory} />
-                {this.renderSwitchDevice(
-                    data.medical_history,
-                    !data.office_visit_notes,
-                    "Physician Device"
-                )}
+            <div style={{ width: "100%" }}>
+                <EncryptionFieldComponent
+                    title="Medical history:"
+                    waitingFor="user input"
+                    model={medicalHistory}
+                />
                 <DecryptionFieldComponent
-                    style={{ marginBottom: 20 }}
                     title="Office visit notes:"
+                    waitingFor="Physician reply"
                     model={officeNotes}
                 />
-                {/*
-                <ReadonlyColumnComponent
-                    style={{ marginBottom: 20 }}
-                    title="Office visit notes:"
-                    model={data.data}
+
+                <DecryptionFieldComponent
+                    title="Prescription notes:"
+                    waitingFor="Physician reply"
+                    model={prescription}
                 />
-                <ReadonlyColumnComponent title="Insurer reply:" model={data.insurerReply} /> */}
+                <DecryptionFieldComponent
+                    title="Insurance reply:"
+                    waitingFor="Insurance reply"
+                    model={insurerReply}
+                />
             </div>
         );
     }

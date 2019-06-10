@@ -60,26 +60,6 @@ export class Store {
     insurerData = new DataStore(this, this.insurer, Device.Insurer);
 
     @action.bound
-    sendMedicalHistory(value: string) {
-        return this.connection.updateState({ medical_history: value });
-    }
-
-    @action.bound
-    sendVisitNotes(value: string) {
-        return this.connection.updateState({ office_visit_notes: value });
-    }
-
-    @action.bound
-    sendPrescription = (value: string) => {
-        return this.connection.updateState({ prescription: value });
-    };
-
-    @action.bound
-    sendInsurerReply = (value: string) => {
-        return this.connection.updateState({ insurer_reply: value });
-    };
-
-    @action.bound
     setActiveDevice(device: Device) {
         this.activeDevice = device;
     }

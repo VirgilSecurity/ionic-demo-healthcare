@@ -1,12 +1,7 @@
-import { observable, action, reaction } from "mobx";
+import { observable, action } from "mobx";
 import { IonicAgent } from "./IonicAgent";
 
-export interface IReadonlyColumnModel {
-    sdk: IonicAgent;
-    valueReaction?: () => string | undefined;
-}
-
-export class ReadonlyColumnModel {
+export class DecryptionFieldModel {
     @observable state: "Waiting" | "Decrypting" | "Ready" | "Unable To Decrypt" = "Waiting";
     @observable value?: string;
 

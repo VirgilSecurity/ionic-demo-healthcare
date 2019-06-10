@@ -1,55 +1,63 @@
 import React from "react";
-import { observer } from "mobx-react";
 import DecryptionFieldComponent from "./components/DecryptionFieldComponent";
 import EncryptionFieldComponent from "./components/EncryptionFieldComponent";
-import { Button } from "react-bootstrap";
-import { Store } from "./Store";
-import { IStateResponse } from "./Connection";
-import { ReadonlyColumnModel } from "./models/DecryptionField";
-import { EditableColumnModel } from "./models/EncryptionField";
+import { DecryptionFieldModel } from "./models/DecryptionField";
+import { EncryptionColumnModel } from "./models/EncryptionField";
+import { IPatientDeviceProps } from "./PatientDevice";
 
-export interface IPhysicianDeviceProps {
-    store: Store;
-    data: IStateResponse;
-}
-
-export default class PhysicianDevice extends React.Component<IPhysicianDeviceProps> {
+export default class PhysicianDevice extends React.Component<IPatientDeviceProps> {
     render() {
-
-        const medicalHistory = new ReadonlyColumnModel(
-            this.props.store.physician,
+        const medicalHistory = new DecryptionFieldModel(
+            this.props.model.sdk,
             this.props.data.medical_history
         );
 
-        const officeNotes = new EditableColumnModel(
+        const officeNotes = new EncryptionColumnModel(
             {
-                sdk: this.props.store.physician,
-                classification: "Medical History",
-                onSubmit: this.props.store.sendVisitNotes
+                sdk: this.props.model.sdk,
+                classification: "Office Visit Notes",
+                onSubmit: this.props.model.sendVisitNotes
             },
             this.props.data.office_visit_notes
         );
 
+        const prescription = new EncryptionColumnModel(
+            {
+                sdk: this.props.model.sdk,
+                classification: "Prescription Order",
+                onSubmit: this.props.model.sendPrescription
+            },
+            this.props.data.prescription
+        );
+
+        const insurerReply = new DecryptionFieldModel(
+            this.props.model.sdk,
+            this.props.data.insurer_reply
+        );
+
         return (
-            <div>
+            <div style={{ width: "100%" }}>
                 <DecryptionFieldComponent
                     title="Medical history:"
+                    waitingFor="Patient reply"
                     model={medicalHistory}
                 />
                 <EncryptionFieldComponent
-                    style={{ marginBottom: 20 }}
                     title="Office visit notes:"
+                    waitingFor="user input"
                     model={officeNotes}
                 />
-                {/*
-                <EditableColumnComponent
+
+                <EncryptionFieldComponent
                     title="Prescription:"
-                    model={physicianModel.prescription}
+                    waitingFor="user input"
+                    model={prescription}
                 />
-                <ReadonlyColumnComponent
+                <DecryptionFieldComponent
                     title="Insurer reply:"
-                    model={physicianModel.insurerReply}
-                /> */}
+                    waitingFor="Insurance reply"
+                    model={insurerReply}
+                />
             </div>
         );
     }

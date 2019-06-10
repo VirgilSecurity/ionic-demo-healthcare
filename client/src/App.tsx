@@ -8,7 +8,6 @@ import IPhoneCover from "./components/IPhoneCover";
 import { WithDataProvider } from "./components/DataProvider";
 import InsurerDevice from "./InsurerDevice";
 
-
 const PatientDeviceWithData = WithDataProvider(PatientDevice);
 const PhysicianDeviceWithData = WithDataProvider(PhysicianDevice);
 const InsurerDeviceWithData = WithDataProvider(InsurerDevice);
@@ -20,45 +19,38 @@ class App extends Component {
     render() {
         return (
             <Container fluid>
+                <Row>
+                    <Col lg="3">
+                        <h2>Patient Device</h2>
+                        <IPhoneCover>
+                            <PatientDeviceWithData
+                                store={this.store}
+                                model={this.store.patientData}
+                            />
+                        </IPhoneCover>
+                    </Col>
+                    <Col lg="3">
+                        <h2>Physician Device</h2>
+                        <IPhoneCover>
+                            <PhysicianDeviceWithData
+                                store={this.store}
+                                model={this.store.physicianData}
+                            />
+                        </IPhoneCover>
+                    </Col>
+                    <Col lg="3">
+                        <h2>Insurer Device</h2>
+                        <IPhoneCover>
+                            <InsurerDeviceWithData
+                                store={this.store}
+                                model={this.store.insurerData}
+                            />
+                        </IPhoneCover>
+                    </Col>
+                </Row>
                 <Button variant="outline-danger" onClick={this.store.reset}>
                     reset
                 </Button>
-                <Row>
-                    <Col
-                        lg="3"
-                        style={{
-                            backgroundColor: "rgba(255, 0, 0, 0.05)"
-                        }}
-                    >
-                        <h2>Patient Device</h2>
-                        <IPhoneCover>
-                            <PatientDeviceWithData store={this.store} model={this.store.patientData}  />
-                        </IPhoneCover>
-                    </Col>
-                    <Col
-                        lg="3"
-                        style={{
-                            backgroundColor: "rgba(255, 0, 0, 0.05)"
-                        }}
-                    >
-                        <h2>Physician Device</h2>
-                        <IPhoneCover>
-                            <PhysicianDeviceWithData store={this.store} model={this.store.physicianData}  />
-                        </IPhoneCover>
-                    </Col>
-                    <Col
-                        lg="3"
-                        style={{
-                            backgroundColor: "rgba(255, 0, 0, 0.05)"
-                        }}
-                    >
-                        <h2>Insurer Device</h2>
-                        <IPhoneCover>
-                            <InsurerDeviceWithData store={this.store} model={this.store.insurerData} />
-                        </IPhoneCover>
-                    </Col>
-                    {/* <InsurerDevice insurerModel={this.store.insurerModel} /> */}
-                </Row>
             </Container>
         );
     }

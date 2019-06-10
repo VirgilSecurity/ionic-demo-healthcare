@@ -14,7 +14,7 @@ export class DataStore {
         return this.store.activeDevice === this.device;
     }
 
-    constructor(private store: Store, private sdk: IonicAgent, private device: Device) {}
+    constructor(private store: Store, public sdk: IonicAgent, private device: Device) {}
 
     @action
     activate = () => {
@@ -30,5 +30,30 @@ export class DataStore {
     setActive = () => {
         this.store.setActiveDevice(this.device);
         this.activate();
+    };
+
+    @action.bound
+    sendMedicalHistory(value: string) {
+        return this.store.connection.updateState({ medical_history: value }).then(this.setState);
+    }
+
+    @action.bound
+    sendVisitNotes(value: string) {
+        return this.store.connection.updateState({ office_visit_notes: value }).then(this.setState);
+    }
+
+    @action.bound
+    sendPrescription = (value: string) => {
+        return this.store.connection.updateState({ prescription: value }).then(this.setState);
+    };
+
+    @action.bound
+    sendInsurerReply = (value: string) => {
+        return this.store.connection.updateState({ insurer_reply: value }).then(this.setState);
+    };
+
+    @action
+    private setState = (state: IStateResponse) => {
+        this.state = state;
     };
 }
