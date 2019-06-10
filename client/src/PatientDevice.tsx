@@ -1,48 +1,61 @@
 import React from "react";
-import EditableColumnComponent from "./components/EditableColumnComponent";
-import { PatientModel } from "./models/PatientModel";
-import ReadonlyColumnComponent from "./components/ReadonlyColumnComponent";
-import { observer } from "mobx-react";
-import { Button } from "react-bootstrap";
+import EncryptionFieldComponent from "./components/EncryptionFieldComponent";
+import DecryptionFieldComponent from "./components/DecryptionFieldComponent";
+import { IStateResponse } from "./Connection";
+import { EditableColumnModel } from "./models/EncryptionField";
+import { Store } from "./Store";
+import { ReadonlyColumnModel } from "./models/DecryptionField";
 
 export interface IPatientDeviceProps {
-    patientModel: PatientModel;
+    store: Store;
+    data: IStateResponse;
 }
 
-@observer
 export default class PatientDevice extends React.Component<IPatientDeviceProps> {
     render() {
-        const { patientModel } = this.props;
+        const { data } = this.props;
+        const medicalHistory = new EditableColumnModel(
+            {
+                sdk: this.props.store.patientSdk,
+                classification: "Medical History",
+                onSubmit: this.props.store.sendMedicalHistory
+            },
+            data.medical_history
+        );
 
-        if (!patientModel.device.isActive) {
-            return (
-                <div
-                    style={{
-                        display: "flex",
-                        height: "100%",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}
-                >
-                    <Button size="lg" onClick={patientModel.device.setActive}>
-                        Activate
-                    </Button>
-                </div>
-            );
-        }
+        const officeNotes = new ReadonlyColumnModel(
+            this.props.store.patientSdk,
+            data.office_visit_notes
+        );
+
         return (
             <div>
-                <EditableColumnComponent
-                    title="Medical history:"
-                    model={patientModel.medicalHistory}
+                <EncryptionFieldComponent title="Medical history:" model={medicalHistory} />
+                {this.renderSwitchDevice(
+                    data.medical_history,
+                    !data.office_visit_notes,
+                    "Physician Device"
+                )}
+                <DecryptionFieldComponent
+                    style={{ marginBottom: 20 }}
+                    title="Office visit notes:"
+                    model={officeNotes}
                 />
+                {/*
                 <ReadonlyColumnComponent
                     style={{ marginBottom: 20 }}
                     title="Office visit notes:"
-                    model={patientModel.officeNotes}
+                    model={data.data}
                 />
-                <ReadonlyColumnComponent title="Insurer reply:" model={patientModel.insurerReply} />
+                <ReadonlyColumnComponent title="Insurer reply:" model={data.insurerReply} /> */}
             </div>
         );
+    }
+
+    renderSwitchDevice(condition1: any, condition2: any, device: string) {
+        if (condition1 && condition2) {
+            return <p>Login to {device} to continue</p>;
+        }
+        return null;
     }
 }

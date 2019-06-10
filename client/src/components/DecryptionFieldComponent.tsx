@@ -1,18 +1,18 @@
 import React, { CSSProperties } from "react";
-import { ReadonlyColumnModel } from "../models/ReadonlyColumnModel";
+import { ReadonlyColumnModel } from "../models/DecryptionField";
 import { observer } from "mobx-react";
 import { Lock, CloudDownload, WaitingIcon } from "./Icons";
 
 
-export interface IReadonlyColumnComponentProps {
+export interface IDecryptionFieldComponentProps {
     title: string;
     model: ReadonlyColumnModel;
     style?: CSSProperties;
 }
 
 @observer
-export default class ReadonlyColumnComponent extends React.Component<
-    IReadonlyColumnComponentProps
+export default class DecryptionFieldComponent extends React.Component<
+    IDecryptionFieldComponentProps
 > {
     render() {
         return (

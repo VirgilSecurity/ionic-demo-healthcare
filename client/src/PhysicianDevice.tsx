@@ -1,38 +1,56 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { PhysicianModel } from "./models/PhysicianModel";
-import ReadonlyColumnComponent from "./components/ReadonlyColumnComponent";
-import EditableColumnComponent from "./components/EditableColumnComponent";
-import { Col } from "react-bootstrap";
+import DecryptionFieldComponent from "./components/DecryptionFieldComponent";
+import EncryptionFieldComponent from "./components/EncryptionFieldComponent";
+import { Button } from "react-bootstrap";
+import { Store } from "./Store";
+import { IStateResponse } from "./Connection";
+import { ReadonlyColumnModel } from "./models/DecryptionField";
+import { EditableColumnModel } from "./models/EncryptionField";
 
 export interface IPhysicianDeviceProps {
-    physicianModel: PhysicianModel;
+    store: Store;
+    data: IStateResponse;
 }
 
-@observer
 export default class PhysicianDevice extends React.Component<IPhysicianDeviceProps> {
     render() {
+
+        const medicalHistory = new ReadonlyColumnModel(
+            this.props.store.physician,
+            this.props.data.medical_history
+        );
+
+        const officeNotes = new EditableColumnModel(
+            {
+                sdk: this.props.store.physician,
+                classification: "Medical History",
+                onSubmit: this.props.store.sendVisitNotes
+            },
+            this.props.data.office_visit_notes
+        );
+
         return (
-            <Col lg="3" style={{ backgroundColor: "rgba(0, 255, 0, 0.05)", padding: 20 }}>
-                <h2>PhysicianDevice</h2>
-                <ReadonlyColumnComponent
+            <div>
+                <DecryptionFieldComponent
                     title="Medical history:"
-                    model={this.props.physicianModel.medicalHistory}
+                    model={medicalHistory}
                 />
-                <EditableColumnComponent
+                <EncryptionFieldComponent
                     style={{ marginBottom: 20 }}
                     title="Office visit notes:"
-                    model={this.props.physicianModel.officeNotes}
+                    model={officeNotes}
                 />
+                {/*
                 <EditableColumnComponent
                     title="Prescription:"
-                    model={this.props.physicianModel.prescription}
+                    model={physicianModel.prescription}
                 />
                 <ReadonlyColumnComponent
                     title="Insurer reply:"
-                    model={this.props.physicianModel.insurerReply}
-                />
-            </Col>
+                    model={physicianModel.insurerReply}
+                /> */}
+            </div>
         );
     }
 }

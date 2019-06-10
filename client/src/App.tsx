@@ -1,20 +1,21 @@
 import React, { Component } from "react";
-import { Store } from "./Store";
+import { Store, Device } from "./Store";
 import { observer } from "mobx-react";
 import { Container, Row, Button, Col } from "react-bootstrap";
-import { asyncSequence } from "./utils";
 import PatientDevice from "./PatientDevice";
 import PhysicianDevice from "./PhysicianDevice";
-import InsurerDevice from "./InsurerDevice";
 import IPhoneCover from "./components/IPhoneCover";
+import { WithDataProvider } from "./components/DataProvider";
+import InsurerDevice from "./InsurerDevice";
+
+
+const PatientDeviceWithData = WithDataProvider(PatientDevice);
+const PhysicianDeviceWithData = WithDataProvider(PhysicianDevice);
+const InsurerDeviceWithData = WithDataProvider(InsurerDevice);
 
 @observer
 class App extends Component {
     store = new Store();
-
-    componentDidMount() {
-       this.store.loadData();
-    }
 
     render() {
         return (
@@ -31,11 +32,32 @@ class App extends Component {
                     >
                         <h2>Patient Device</h2>
                         <IPhoneCover>
-                            <PatientDevice patientModel={this.store.patientModel} />
+                            <PatientDeviceWithData store={this.store} model={this.store.patientData}  />
                         </IPhoneCover>
                     </Col>
-                    <PhysicianDevice physicianModel={this.store.physicianModel} />
-                    <InsurerDevice insurerModel={this.store.insurerModel} />
+                    <Col
+                        lg="3"
+                        style={{
+                            backgroundColor: "rgba(255, 0, 0, 0.05)"
+                        }}
+                    >
+                        <h2>Physician Device</h2>
+                        <IPhoneCover>
+                            <PhysicianDeviceWithData store={this.store} model={this.store.physicianData}  />
+                        </IPhoneCover>
+                    </Col>
+                    <Col
+                        lg="3"
+                        style={{
+                            backgroundColor: "rgba(255, 0, 0, 0.05)"
+                        }}
+                    >
+                        <h2>Insurer Device</h2>
+                        <IPhoneCover>
+                            <InsurerDeviceWithData store={this.store} model={this.store.insurerData} />
+                        </IPhoneCover>
+                    </Col>
+                    {/* <InsurerDevice insurerModel={this.store.insurerModel} /> */}
                 </Row>
             </Container>
         );

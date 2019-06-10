@@ -1,9 +1,8 @@
 import { observable, action } from "mobx";
-import { Connection } from "./Connnection";
+import { Connection } from "./Connection";
 import { IonicAgent } from "./models/IonicAgent";
-import { PhysicianModel } from "./models/PhysicianModel";
-import { PatientModel } from "./models/PatientModel";
-import { InsurerModel } from "./models/InsurerModel";
+// import { InsurerModel } from "./models/InsurerModel";
+import { DataStore } from "./models/DataStore";
 
 export interface IStoreProps {
     store?: Store;
@@ -12,13 +11,25 @@ export interface IStoreProps {
 export enum Device {
     Patient,
     Physician,
-    Insurer,
+    Insurer
 }
 
 export class Store {
     @observable activeDevice: Device | null = null;
 
     connection = new Connection();
+
+    patientSdk = new IonicAgent({
+        username: "test_patient",
+        password: "password123",
+        fetchIonicAssertion: () =>
+            this.connection.registerUser({
+                email: "test_patient@healthcaredemo.com",
+                groupName: "patients",
+                firstName: "Test",
+                lastName: "Patient"
+            })
+    });
 
     physician = new IonicAgent({
         username: "test_physician",
@@ -44,67 +55,28 @@ export class Store {
             })
     });
 
-    @observable state: {
-        medical_history?: string;
-        office_visit_notes?: string;
-        prescription?: string;
-        insurer_reply?: string;
-    } = {
-        medical_history: undefined,
-        office_visit_notes: undefined,
-        prescription: undefined,
-        insurer_reply: undefined
-    };
-
-    physicianModel = new PhysicianModel(this);
-    patientModel = new PatientModel(this);
-    insurerModel = new InsurerModel(this);
-
-    @action.bound
-    loadData() {
-        this.connection.fetchState().then(data => {
-            this.state = data;
-        });
-    }
+    patientData = new DataStore(this, this.patientSdk, Device.Patient);
+    physicianData = new DataStore(this, this.physician, Device.Physician);
+    insurerData = new DataStore(this, this.insurer, Device.Insurer);
 
     @action.bound
     sendMedicalHistory(value: string) {
-        return this.connection
-            .updateState({ ...this.state, medical_history: value })
-            .then(updatedState => {
-                this.state = updatedState;
-                return value;
-            });
+        return this.connection.updateState({ medical_history: value });
     }
 
     @action.bound
     sendVisitNotes(value: string) {
-        return this.connection
-            .updateState({ ...this.state, office_visit_notes: value })
-            .then(updatedState => {
-                this.state = updatedState;
-                return value;
-            });
+        return this.connection.updateState({ office_visit_notes: value });
     }
 
     @action.bound
     sendPrescription = (value: string) => {
-        return this.connection
-            .updateState({ ...this.state, prescription: value })
-            .then(updatedState => {
-                this.state = updatedState;
-                return value;
-            });
+        return this.connection.updateState({ prescription: value });
     };
 
     @action.bound
     sendInsurerReply = (value: string) => {
-        return this.connection
-            .updateState({ ...this.state, insurer_reply: value })
-            .then(updatedState => {
-                this.state = updatedState;
-                return value;
-            });
+        return this.connection.updateState({ insurer_reply: value });
     };
 
     @action.bound
@@ -114,5 +86,5 @@ export class Store {
 
     reset = () => {
         this.connection.reset().then(() => document.location.reload());
-    }
+    };
 }

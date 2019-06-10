@@ -1,18 +1,18 @@
 import React, { CSSProperties } from "react";
-import { EditableColumnModel } from "../models/EditableColumnModel";
+import { EditableColumnModel } from "../models/EncryptionField";
 import ReplyForm from "./ReplyForm";
 import { observer } from "mobx-react";
 import { WaitingIcon, SpinnerIcon, EditIcon } from "./Icons";
 
-export interface IEditableColumnComponentProps {
+export interface IEncryptionFieldComponentProps {
     title: string;
     model: EditableColumnModel;
     style?: CSSProperties;
 }
 
 @observer
-export default class EditableColumnComponent extends React.Component<
-    IEditableColumnComponentProps
+export default class EncryptionFieldComponent extends React.Component<
+    IEncryptionFieldComponentProps
 > {
     render() {
         return (

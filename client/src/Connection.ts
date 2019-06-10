@@ -13,7 +13,7 @@ export interface IRegisterUserParams {
 }
 
 export class Connection {
-    fetchState = () => {
+    fetchState = (): Promise<IStateResponse> => {
         return fetch('/state').then(response => {
             if (!response.ok) {
                 throw new Error(`Error fetching state: ${response.status}: ${response.statusText}`);

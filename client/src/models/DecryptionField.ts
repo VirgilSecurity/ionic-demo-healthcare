@@ -3,23 +3,16 @@ import { IonicAgent } from "./IonicAgent";
 
 export interface IReadonlyColumnModel {
     sdk: IonicAgent;
-    valueReaction: () => string | undefined;
+    valueReaction?: () => string | undefined;
 }
 
 export class ReadonlyColumnModel {
     @observable state: "Waiting" | "Decrypting" | "Ready" | "Unable To Decrypt" = "Waiting";
     @observable value?: string;
 
-    sdk: IonicAgent;
+    constructor(private sdk: IonicAgent, data?: string) {
 
-    constructor(options: IReadonlyColumnModel) {
-        const { sdk, valueReaction } = options;
-
-        this.sdk = sdk;
-
-        reaction(valueReaction, (data) => {
-            if (data) this.decrypt(data);
-        })
+        if (data) this.decrypt(data);
     }
 
     @action

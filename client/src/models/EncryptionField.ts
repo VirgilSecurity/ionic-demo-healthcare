@@ -5,7 +5,7 @@ export interface IEditableColumnModelOptions {
     sdk: IonicAgent;
     classification: DataClassification;
     onSubmit: (message: string) => Promise<string>;
-    valueReaction: () => string | undefined;
+    valueReaction?: () => string | undefined;
     activateReaction?: () => any;
 }
 
@@ -26,11 +26,12 @@ export class EditableColumnModel {
     private onSubmit: (message: string) => Promise<string>;
 
 
-    constructor(options: IEditableColumnModelOptions) {
+    constructor(options: IEditableColumnModelOptions, data?: string) {
         const { sdk, classification, onSubmit, valueReaction, activateReaction } = options;
         this.sdk = sdk;
         this.onSubmit = onSubmit;
         this.classification = classification;
+        data ? this.decrypt(data) : this.startEditing();
         // reaction(valueReaction, data => this.activate(data));
         // if (activateReaction) reaction(activateReaction, this.startEditing);
     }
