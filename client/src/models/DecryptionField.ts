@@ -6,7 +6,6 @@ export class DecryptionFieldModel {
     @observable value?: string;
 
     constructor(private sdk: IonicAgent, data?: string) {
-
         if (data) this.decrypt(data);
     }
 

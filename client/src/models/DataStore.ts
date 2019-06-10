@@ -6,10 +6,6 @@ import { Store, Device } from "../Store";
 export class DataStore {
     @observable state: IStateResponse | null = null;
 
-    @computed get model() {
-        if (!this.state) return null;
-    }
-
     @computed get isActive() {
         return this.store.activeDevice === this.device;
     }
@@ -19,10 +15,9 @@ export class DataStore {
     @action
     activate = () => {
         this.state = null;
+
         Promise.all([this.store.connection.fetchState(), this.sdk.loadProfile()]).then(
-            ([state]) => {
-                this.state = state;
-            }
+            ([state]) => (this.state = state)
         );
     };
 
@@ -58,10 +53,5 @@ export class DataStore {
         return this.store.connection.updateState({ insurer_reply: value }).then(() => {
             if (this.state) this.state.insurer_reply = value;
         });
-    };
-
-    @action
-    private setState = (state: IStateResponse) => {
-        this.state = state;
     };
 }

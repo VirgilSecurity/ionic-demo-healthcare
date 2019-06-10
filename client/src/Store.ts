@@ -1,7 +1,6 @@
 import { observable, action } from "mobx";
 import { Connection } from "./Connection";
 import { IonicAgent } from "./models/IonicAgent";
-// import { InsurerModel } from "./models/InsurerModel";
 import { DataStore } from "./models/DataStore";
 
 export interface IStoreProps {
