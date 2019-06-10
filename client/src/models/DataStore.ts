@@ -2,6 +2,7 @@ import { IonicAgent } from "./IonicAgent";
 import { Connection, IStateResponse } from "../Connection";
 import { observable, action, computed } from "mobx";
 import { Store, Device } from "../Store";
+import { throws } from "assert";
 
 export class DataStore {
     @observable state: IStateResponse | null = null;
@@ -34,22 +35,30 @@ export class DataStore {
 
     @action.bound
     sendMedicalHistory(value: string) {
-        return this.store.connection.updateState({ medical_history: value }).then(this.setState);
+        return this.store.connection.updateState({ medical_history: value }).then(() => {
+            if (this.state) this.state.medical_history = value;
+        });
     }
 
     @action.bound
     sendVisitNotes(value: string) {
-        return this.store.connection.updateState({ office_visit_notes: value }).then(this.setState);
+        return this.store.connection.updateState({ office_visit_notes: value }).then(() => {
+            if (this.state) this.state.office_visit_notes = value;
+        });
     }
 
     @action.bound
     sendPrescription = (value: string) => {
-        return this.store.connection.updateState({ prescription: value }).then(this.setState);
+        return this.store.connection.updateState({ prescription: value }).then(() => {
+            if (this.state) this.state.prescription = value;
+        });
     };
 
     @action.bound
     sendInsurerReply = (value: string) => {
-        return this.store.connection.updateState({ insurer_reply: value }).then(this.setState);
+        return this.store.connection.updateState({ insurer_reply: value }).then(() => {
+            if (this.state) this.state.insurer_reply = value;
+        });
     };
 
     @action
