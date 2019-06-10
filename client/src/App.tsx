@@ -18,9 +18,12 @@ class App extends Component {
 
     render() {
         return (
-            <Container fluid>
+            <Container>
+                <Button variant="outline-danger" onClick={this.store.reset}>
+                    reset
+                </Button>
                 <Row>
-                    <Col lg="3">
+                    <Col lg="4">
                         <h2>Patient Device</h2>
                         <IPhoneCover>
                             <PatientDeviceWithData
@@ -29,7 +32,7 @@ class App extends Component {
                             />
                         </IPhoneCover>
                     </Col>
-                    <Col lg="3">
+                    <Col lg="4">
                         <h2>Physician Device</h2>
                         <IPhoneCover>
                             <PhysicianDeviceWithData
@@ -38,7 +41,7 @@ class App extends Component {
                             />
                         </IPhoneCover>
                     </Col>
-                    <Col lg="3">
+                    <Col lg="4">
                         <h2>Insurer Device</h2>
                         <IPhoneCover>
                             <InsurerDeviceWithData
@@ -48,9 +51,6 @@ class App extends Component {
                         </IPhoneCover>
                     </Col>
                 </Row>
-                <Button variant="outline-danger" onClick={this.store.reset}>
-                    reset
-                </Button>
             </Container>
         );
     }
