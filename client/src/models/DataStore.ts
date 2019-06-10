@@ -1,8 +1,7 @@
 import { IonicAgent } from "./IonicAgent";
-import { Connection, IStateResponse } from "../Connection";
+import { IStateResponse } from "../Connection";
 import { observable, action, computed } from "mobx";
 import { Store, Device } from "../Store";
-import { throws } from "assert";
 
 export class DataStore {
     @observable state: IStateResponse | null = null;

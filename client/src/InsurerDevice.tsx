@@ -1,5 +1,4 @@
 import React from "react";
-// // import { InsurerModel } from "./models/InsurerModel";
 import DecryptionFieldComponent from "./components/DecryptionFieldComponent";
 import { DecryptionFieldModel } from "./models/DecryptionField";
 import { IPatientDeviceProps } from "./PatientDevice";

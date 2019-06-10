@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Store, Device } from "./Store";
+import { Store } from "./Store";
 import { observer } from "mobx-react";
 import { Container, Row, Button, Col } from "react-bootstrap";
 import PatientDevice from "./PatientDevice";
