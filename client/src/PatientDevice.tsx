@@ -55,11 +55,4 @@ export default class PatientDevice extends React.Component<IPatientDeviceProps> 
             </div>
         );
     }
-
-    renderSwitchDevice(condition1: any, condition2: any, device: string) {
-        if (condition1 && condition2) {
-            return <p>Login to {device} to continue</p>;
-        }
-        return null;
-    }
 }
