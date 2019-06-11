@@ -1,22 +1,23 @@
 import React, { CSSProperties } from "react";
-import { ReadonlyColumnModel } from "../models/ReadonlyColumnModel";
+import { DecryptionFieldModel } from "../models/DecryptionField";
 import { observer } from "mobx-react";
 import { Lock, CloudDownload, WaitingIcon } from "./Icons";
 
 
-export interface IReadonlyColumnComponentProps {
+export interface IDecryptionFieldComponentProps {
     title: string;
-    model: ReadonlyColumnModel;
+    model: DecryptionFieldModel;
+    waitingFor: string;
     style?: CSSProperties;
 }
 
 @observer
-export default class ReadonlyColumnComponent extends React.Component<
-    IReadonlyColumnComponentProps
+export default class DecryptionFieldComponent extends React.Component<
+    IDecryptionFieldComponentProps
 > {
     render() {
         return (
-            <div style={this.props.style}>
+            <div style={{ ...this.props.style, paddingBottom: 20 }}>
                 <b>{this.props.title}</b>
                 <div style={{ overflow: "hidden", wordBreak: "break-all", color: this.getColor() }}>{this.renderBody()}</div>
             </div>
@@ -30,7 +31,7 @@ export default class ReadonlyColumnComponent extends React.Component<
     private renderBody = () => {
         const { state, value } = this.props.model;
         if (state === "Waiting") {
-            return <><WaitingIcon />Waiting for user data</>;
+            return <><WaitingIcon />Waiting for {this.props.waitingFor}</>;
         }
 
         if (state === "Decrypting") {

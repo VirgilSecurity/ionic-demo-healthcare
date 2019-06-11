@@ -1,31 +1,17 @@
-import { observable, action, reaction } from "mobx";
+import { observable, action } from "mobx";
 import { IonicAgent } from "./IonicAgent";
 
-export interface IReadonlyColumnModel {
-    sdk: IonicAgent;
-    valueReaction: () => string | undefined;
-}
-
-export class ReadonlyColumnModel {
+export class DecryptionFieldModel {
     @observable state: "Waiting" | "Decrypting" | "Ready" | "Unable To Decrypt" = "Waiting";
     @observable value?: string;
 
-    sdk: IonicAgent;
-
-    constructor(options: IReadonlyColumnModel) {
-        const { sdk, valueReaction } = options;
-
-        this.sdk = sdk;
-
-        reaction(valueReaction, (data) => {
-            if (data) this.decrypt(data);
-        })
+    constructor(private sdk: IonicAgent, data?: string) {
+        if (data) this.decrypt(data);
     }
 
     @action
     decrypt(encryptedMessage: string) {
         this.state = "Decrypting";
-        console.log('encryptedMessage', encryptedMessage);
         this.sdk.decryptText(encryptedMessage).then(message => {
             this.state = "Ready";
             this.value = message;

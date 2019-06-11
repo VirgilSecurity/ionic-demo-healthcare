@@ -1,45 +1,35 @@
-import { observable, action, reaction } from "mobx";
+import { observable, action } from "mobx";
 import { IonicAgent, DataClassification } from "./IonicAgent";
 
-export interface IEditableColumnModelOptions {
+export interface IDecryptionColumnModelOptions {
     sdk: IonicAgent;
     classification: DataClassification;
-    onSubmit: (message: string) => Promise<string>;
-    valueReaction: () => string | undefined;
-    activateReaction?: () => any;
+    onSubmit: (message: string) => Promise<void>;
 }
 
-type EditableColumnStates = | "Waiting"
-| "Editing"
-| "Encrypting"
-| "Sending"
-| "Decrypting"
-| "Ready"
-| "Unable To Decrypt";
+type EditableColumnStates =
+    | "Waiting"
+    | "Editing"
+    | "Encrypting"
+    | "Sending"
+    | "Decrypting"
+    | "Ready"
+    | "Unable To Decrypt";
 
-export class EditableColumnModel {
+export class EncryptionColumnModel {
     @observable value?: string;
     @observable state: EditableColumnStates = "Waiting";
 
     private sdk: IonicAgent;
     private classification: DataClassification;
-    private onSubmit: (message: string) => Promise<string>;
+    private onSubmit: (message: string) => Promise<void>;
 
-
-    constructor(options: IEditableColumnModelOptions) {
-        const { sdk, classification, onSubmit, valueReaction, activateReaction } = options;
+    constructor(options: IDecryptionColumnModelOptions, data?: string) {
+        const { sdk, classification, onSubmit } = options;
         this.sdk = sdk;
         this.onSubmit = onSubmit;
         this.classification = classification;
-        reaction(valueReaction, data => this.activate(data));
-        if (activateReaction) reaction(activateReaction, this.startEditing);
-    }
-
-    @action.bound
-    activate(value?: string) {
-        console.log('this.state', this.state);
-        if (this.state !== "Waiting") return;
-        value ? this.decrypt(value) : this.startEditing();
+        data ? this.decrypt(data) : this.startEditing();
     }
 
     @action.bound
@@ -57,7 +47,7 @@ export class EditableColumnModel {
                 this.state = "Sending";
                 return encryptedMessage;
             })
-            .catch(e => console.log('err', e));
+            .catch(e => console.log("err", e));
     }
 
     @action.bound

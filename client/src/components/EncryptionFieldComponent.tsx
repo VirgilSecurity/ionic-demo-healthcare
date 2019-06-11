@@ -1,22 +1,23 @@
 import React, { CSSProperties } from "react";
-import { EditableColumnModel } from "../models/EditableColumnModel";
+import { EncryptionColumnModel } from "../models/EncryptionField";
 import ReplyForm from "./ReplyForm";
 import { observer } from "mobx-react";
 import { WaitingIcon, SpinnerIcon, EditIcon } from "./Icons";
 
-export interface IEditableColumnComponentProps {
+export interface IEncryptionFieldComponentProps {
     title: string;
-    model: EditableColumnModel;
+    model: EncryptionColumnModel;
+    waitingFor: string;
     style?: CSSProperties;
 }
 
 @observer
-export default class EditableColumnComponent extends React.Component<
-    IEditableColumnComponentProps
+export default class EncryptionFieldComponent extends React.Component<
+    IEncryptionFieldComponentProps
 > {
     render() {
         return (
-            <div style={this.props.style}>
+            <div style={{ ...this.props.style, paddingBottom: 20 }}>
                 <b>{this.props.title}</b>
                 <div style={{ overflow: "hidden", wordBreak: "break-all" }}>
                     {this.renderBody()}
@@ -31,7 +32,7 @@ export default class EditableColumnComponent extends React.Component<
         if (state === "Waiting") {
             return (
                 <>
-                    <WaitingIcon /> Waiting for data
+                    <WaitingIcon /> Waiting for {this.props.waitingFor}
                 </>
             );
         }
