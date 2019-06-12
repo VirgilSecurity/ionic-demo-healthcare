@@ -19,12 +19,9 @@ class App extends Component {
     render() {
         return (
             <Container>
-                <Button variant="outline-danger" onClick={this.store.reset}>
-                    reset
-                </Button>
                 <Row>
                     <Col lg="4">
-                        <h2>Patient Device</h2>
+                        <h2 style={{ textAlign: "center", marginBottom: 20 }}>Patient</h2>
                         <IPhoneCover>
                             <PatientDeviceWithData
                                 store={this.store}
@@ -33,7 +30,7 @@ class App extends Component {
                         </IPhoneCover>
                     </Col>
                     <Col lg="4">
-                        <h2>Physician Device</h2>
+                        <h2 style={{ textAlign: "center", marginBottom: 20 }}>Physician</h2>
                         <IPhoneCover>
                             <PhysicianDeviceWithData
                                 store={this.store}
@@ -42,7 +39,7 @@ class App extends Component {
                         </IPhoneCover>
                     </Col>
                     <Col lg="4">
-                        <h2>Insurer Device</h2>
+                        <h2 style={{ textAlign: "center", marginBottom: 20 }}>Insurer</h2>
                         <IPhoneCover>
                             <InsurerDeviceWithData
                                 store={this.store}
@@ -50,6 +47,15 @@ class App extends Component {
                             />
                         </IPhoneCover>
                     </Col>
+                </Row>
+                <Row className="justify-content-md-center">
+                    <Button
+                        variant="outline-danger"
+                        style={{ marginTop: 20 }}
+                        onClick={this.store.reset}
+                    >
+                        reset
+                    </Button>
                 </Row>
             </Container>
         );
