@@ -7,6 +7,8 @@ export interface IStoreProps {
     store?: Store;
 }
 
+const ENROLLMENT_URL = 'https://preview-enrollment.ionic.com/keyspace/JilX/sp/5c7ec51be5a7322a83fd22a5/headless/saml';
+
 export enum Device {
     Patient,
     Physician,
@@ -21,7 +23,8 @@ export class Store {
     patientSdk = new IonicAgent({
         username: "test_patient",
         password: "password123",
-        fetchIonicAssertion: () =>
+        enrollmentUrl: ENROLLMENT_URL,
+        fetchSamlAssertion: () =>
             this.connection.registerUser({
                 email: "test_patient@healthcaredemo.com",
                 groupName: "patients",
@@ -33,7 +36,8 @@ export class Store {
     physician = new IonicAgent({
         username: "test_physician",
         password: "password123",
-        fetchIonicAssertion: () =>
+        enrollmentUrl: ENROLLMENT_URL,
+        fetchSamlAssertion: () =>
             this.connection.registerUser({
                 email: "test_physician@healthcaredemo.com",
                 groupName: "physicians",
@@ -45,7 +49,8 @@ export class Store {
     insurer = new IonicAgent({
         username: "test_insurer",
         password: "password123",
-        fetchIonicAssertion: () =>
+        enrollmentUrl: ENROLLMENT_URL,
+        fetchSamlAssertion: () =>
             this.connection.registerUser({
                 email: "test_insurer@healthcaredemo.com",
                 groupName: "insurers",

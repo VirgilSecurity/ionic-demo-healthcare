@@ -3,7 +3,8 @@ import { Mutex } from 'async-mutex';
 export interface IonicAgentParams {
     username: string;
     password: string;
-    fetchIonicAssertion: () => Promise<object>;
+    enrollmentUrl: string;
+    fetchSamlAssertion: () => Promise<string>;
 }
 
 export type DataClassification = 'Medical History'|'Office Visit Notes'|'Prescription Order'|'Insurance Reply';
@@ -13,9 +14,9 @@ const ActiveProfileMutex = new Mutex();
 export class IonicAgent {
     profileInfo: IonicSdk.IProfileInfo;
     sdk: IonicSdk.ISAgent;
-    fetchAssertion: () => Promise<object>;
+    fetchSamlAssertion: () => Promise<string>;
 
-    constructor({ username, password, fetchIonicAssertion }: IonicAgentParams) {
+    constructor({ username, password, fetchSamlAssertion, enrollmentUrl }: IonicAgentParams) {
         this.profileInfo = {
             appId: 'healthcare-demo',
             userId: username,
@@ -26,10 +27,10 @@ export class IonicAgent {
             // SAML Assertion and Ionic Assertion for device enrollment.
             // This is not an officially supported "method" of enrollment.
             // For supported methods see https://dev.ionic.com/platform/enrollment
-            enrollmentUrl: 'http://localhost:8080/'
+            enrollmentUrl: enrollmentUrl
         };
         this.sdk = new IonicSdk.ISAgent();
-        this.fetchAssertion = fetchIonicAssertion;
+        this.fetchSamlAssertion = fetchSamlAssertion;
     }
 
     private loadUser() {
@@ -62,6 +63,28 @@ export class IonicAgent {
                     throw error;
                 }
             );
+        });
+    }
+
+    private getIonicAssertion(samlResponseXml: string) {
+        console.log('Sending SAML response to enrollemnt url');
+        return fetch(this.profileInfo.enrollmentUrl, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+                'expect': '100-continue',
+            },
+            body: new URLSearchParams({ SAMLResponse: samlResponseXml })
+        }).then(enrollmentResponse => {
+            console.log(`Enrollment response: ${enrollmentResponse.status}`);
+            const ionicAssertion = {
+                'X-Ionic-Reg-Uidauth': enrollmentResponse.headers.get('X-Ionic-Reg-Uidauth'),
+                'X-Ionic-Reg-Stoken': enrollmentResponse.headers.get('X-Ionic-Reg-Stoken'),
+                'X-Ionic-Reg-Ionic-API-Urls': enrollmentResponse.headers.get('X-Ionic-Reg-Ionic-API-Urls'),
+                'X-Ionic-Reg-Enrollment-Tag': enrollmentResponse.headers.get('X-Ionic-Reg-Enrollment-Tag'),
+                'X-Ionic-Reg-Pubkey': enrollmentResponse.headers.get('X-Ionic-Reg-Pubkey')
+            };
+            return ionicAssertion;
         });
     }
 
@@ -99,7 +122,8 @@ export class IonicAgent {
                 // We ignore `resp.redirect` and `resp.notifier` (which is a Promise
                 // that resolves when enrollment completes) here because we use custom
                 // enrollment "method" - see comment in the constructor of IonicAgent
-                return this.fetchAssertion()
+                return this.fetchSamlAssertion()
+                    .then(samlResponseXml => this.getIonicAssertion(samlResponseXml))
                     .then(assertion => this.sdk.createDevice(assertion))
                     .then(() => this.loadUser());
             }

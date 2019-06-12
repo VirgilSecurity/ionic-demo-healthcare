@@ -35,7 +35,7 @@ export class Connection {
             });
     }
 
-    registerUser = (params: IRegisterUserParams) => {
+    registerUser = (params: IRegisterUserParams): Promise<string> => {
         return fetch('/register', {
             method: 'POST',
             headers: {

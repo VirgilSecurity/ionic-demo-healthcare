@@ -3,7 +3,7 @@ declare namespace IonicSdk {
         appId: string;
         userId: string;
         userAuth: string;
-        enrollmentUrl?: string;
+        enrollmentUrl: string;
         deviceId?: string;
     }
 

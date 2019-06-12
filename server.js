@@ -104,18 +104,18 @@ app.post(
       return;
     }
 
-    debug('getting Ionic assertion');
-    let ionicAssertion;
-    try {
-      ionicAssertion = await getIonicAssertion(process.env.IONIC_ENROLLMENT_ENDPOINT, samlResponse);
-      debug('got Ionic assertion');
-    } catch(err) {
-      debug('error getting Ionic assertion: %o', err);
-      res.status(500).json({ error: err.message });
-      return;
-    }
+    // debug('getting Ionic assertion');
+    // let ionicAssertion;
+    // try {
+    //   ionicAssertion = await getIonicAssertion(process.env.IONIC_ENROLLMENT_ENDPOINT, samlResponse);
+    //   debug('got Ionic assertion');
+    // } catch(err) {
+    //   debug('error getting Ionic assertion: %o', err);
+    //   res.status(500).json({ error: err.message });
+    //   return;
+    // }
 
-    res.status(200).json({ assertion: ionicAssertion, user });
+    res.status(200).json({ assertion: samlResponse, user });
   }
 );
 
