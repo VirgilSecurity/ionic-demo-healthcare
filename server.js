@@ -3,10 +3,8 @@ const dotenv = require('dotenv');
 const express = require('express');
 const morgan = require('morgan');
 const { body: checkBody, validationResult, oneOf } = require('express-validator/check');
-const buildResponse = require('./server/saml/build-response');
-const getIonicAssertion = require('./server/get-ionic-assertion');
+const { buildSamlResponse, Client: IonicClient } = require('ionic-admin-sdk');
 const debug = require('./server/debug');
-const IonicClient = require('./server/ionic/client');
 const UserService = require('./server/ionic/user-service');
 const PREDEFINED_GROUPS = require('./server/data/groups.json');
 const StateStorage = require('./server/db/state-storage');
@@ -70,7 +68,10 @@ app.post(
       new IonicClient({
         baseUrl: process.env.IONIC_API_BASE_URL,
         tenantId: process.env.IONIC_TENANT_ID,
-        authToken: process.env.IONIC_API_AUTH_TOKEN
+        auth: {
+            type: 'bearer',
+            secretToken: process.env.IONIC_API_AUTH_TOKEN
+        }
       })
     );
 
@@ -90,7 +91,7 @@ app.post(
     let samlResponse;
 
     try {
-      samlResponse = buildResponse({
+      samlResponse = buildSamlResponse({
         privateKey: process.env.IONIC_IDP_PRIVATE_KEY,
         userEmail: email,
         recipientUrl: process.env.IONIC_ENROLLMENT_ENDPOINT,
@@ -103,17 +104,6 @@ app.post(
       res.status(500).json({ error: err.message });
       return;
     }
-
-    // debug('getting Ionic assertion');
-    // let ionicAssertion;
-    // try {
-    //   ionicAssertion = await getIonicAssertion(process.env.IONIC_ENROLLMENT_ENDPOINT, samlResponse);
-    //   debug('got Ionic assertion');
-    // } catch(err) {
-    //   debug('error getting Ionic assertion: %o', err);
-    //   res.status(500).json({ error: err.message });
-    //   return;
-    // }
 
     res.status(200).json({ assertion: samlResponse, user });
   }

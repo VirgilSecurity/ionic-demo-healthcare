@@ -20,33 +20,21 @@ module.exports = {
     APP_POLICIES: [
         {
             policyId: 'Healthcare Demo Patients',
-            description: 'User is in the group Patients',
-            ruleCombiningAlgId: 'deny-overrides',
+            ruleCombiningAlgId: 'first-applicable',
             appliesToGroup: PATIENTS,
-            allowDataMarkedWith: [MEDICAL_HISTORY, OFFICE_VISIT_NOTES, PRESCRIPTION_ORDER, INSURANCE_REPLY],
-            get ruleDescription() {
-                return `Allow access if data is marked with classification matching ${this.allowDataMarkedWith.join(', ')}`;
-            }
+            allowDataMarkedWith: [MEDICAL_HISTORY, OFFICE_VISIT_NOTES, PRESCRIPTION_ORDER, INSURANCE_REPLY]
         },
         {
             policyId: 'Healthcare Demo Physicians',
-            description: 'User is in the group Physicians',
-            ruleCombiningAlgId: 'deny-overrides',
+            ruleCombiningAlgId: 'first-applicable',
             appliesToGroup: PHYSICIANS,
-            allowDataMarkedWith: [MEDICAL_HISTORY, OFFICE_VISIT_NOTES, PRESCRIPTION_ORDER, INSURANCE_REPLY],
-            get ruleDescription() {
-                return `Allow access if data is marked with classification matching ${this.allowDataMarkedWith.join(', ')}`;
-            }
+            allowDataMarkedWith: [MEDICAL_HISTORY, OFFICE_VISIT_NOTES, PRESCRIPTION_ORDER, INSURANCE_REPLY]
         },
         {
             policyId: 'Healthcare Demo Insurers',
-            description: 'User is in the group Insurers',
-            ruleCombiningAlgId: 'deny-overrides',
+            ruleCombiningAlgId: 'first-applicable',
             appliesToGroup: INSURERS,
-            allowDataMarkedWith: [OFFICE_VISIT_NOTES, INSURANCE_REPLY],
-            get ruleDescription() {
-                return `Allow access if data is marked with classification matching ${this.allowDataMarkedWith.join(', ')}`;
-            }
+            allowDataMarkedWith: [OFFICE_VISIT_NOTES, INSURANCE_REPLY]
         }
     ]
 }

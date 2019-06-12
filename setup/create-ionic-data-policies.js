@@ -1,15 +1,13 @@
 const { formatNamesList, reportError } = require('./utils');
 const {
-    DataPolicy,
-    Attributes,
-    stringAtLeastOneMemberOf
-} = require('../server/ionic/data-policy');
+    policies: { createPolicy, Attributes, fns}
+} = require('ionic-admin-sdk');
 
 const { APP_POLICIES } = require('./app-data');
 
 async function createIonicDataPolicies(client) {
-    const { Resources: existingPolicies } = await client.findDataPolicies({
-        searchParams: {
+    const { Resources: existingPolicies } = await client.dataPolicies.listPolicies({
+        filter: {
             policyId: { __any: APP_POLICIES.map(p => p.policyId) }
         }
     })
@@ -24,17 +22,17 @@ async function createIonicDataPolicies(client) {
     if (missingPolicies.length > 0) {
         console.log(`Creating ${formatNamesList(missingPolicies.map(p => p.policyId), 'policy', 'policies')}`);
         const policyRequests = missingPolicies.map(p => {
-            return new DataPolicy({
+            return createPolicy({
                 policyId: p.policyId,
-                description: p.description,
                 ruleCombiningAlgId: p.ruleCombiningAlgId,
                 enabled: true
             })
-            .when(stringAtLeastOneMemberOf(Attributes.subject.groupName, p.appliesToGroup))
-            .allowIf(stringAtLeastOneMemberOf(Attributes.resource.classification, p.allowDataMarkedWith), p.ruleDescription)
-            .toJSON();
+            .appliesTo(fns.stringAtLeastOneMemberOf(Attributes.subject.groupName, p.appliesToGroup))
+            .allowIf(fns.stringAtLeastOneMemberOf(Attributes.resource.classification, p.allowDataMarkedWith))
+            .denyOtherwise()
+            .toJson();
         });
-        await Promise.all(policyRequests.map(pr => client.createPolicy(pr)));
+        await Promise.all(policyRequests.map(pr => client.dataPolicies.createPolicy(pr)));
         console.log('Policies created');
     }
 }
@@ -43,12 +41,15 @@ module.exports = createIonicDataPolicies;
 
 if (require.main === module) {
     require('dotenv').config();
-    const IonicClient = require('../server/ionic/client');
+    const { Client: IonicClient } = require('ionic-admin-sdk');
 
     const client = new IonicClient({
         baseUrl: process.env.IONIC_API_BASE_URL,
         tenantId: process.env.IONIC_TENANT_ID,
-        authToken: process.env.IONIC_API_AUTH_TOKEN
+        auth: {
+            type: 'bearer',
+            secretToken: process.env.IONIC_API_AUTH_TOKEN
+        }
     });
 
     createIonicDataPolicies(client)
