@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const express = require('express');
 const morgan = require('morgan');
 const { body: checkBody, validationResult, oneOf } = require('express-validator/check');
-const { buildSamlResponse, Client: IonicClient } = require('ionic-admin-sdk');
+const { buildSamlResponse, IonicApiClient } = require('ionic-admin-sdk');
 const debug = require('./server/debug');
 const UserService = require('./server/ionic/user-service');
 const PREDEFINED_GROUPS = require('./server/data/groups.json');
@@ -65,7 +65,7 @@ app.post(
     const { firstName, lastName, email, groupName } = req.body;
 
     const userService = new UserService(
-      new IonicClient({
+      new IonicApiClient({
         baseUrl: process.env.IONIC_API_BASE_URL,
         tenantId: process.env.IONIC_TENANT_ID,
         auth: {
