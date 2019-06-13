@@ -2,7 +2,7 @@ const { formatNamesList, reportError } = require('./utils');
 const { APP_GROUP_NAMES } = require('./app-data');
 
 async function createIonicGroups(client) {
-    const existingGroupsResponse = await client.scim.groups.listGroups({
+    const existingGroupsResponse = await client.scim.listGroups({
         filter: {
             name: { __any: APP_GROUP_NAMES }
         },
@@ -20,7 +20,7 @@ async function createIonicGroups(client) {
     if (missingGroupNames.length > 0) {
         console.log(`Creating ${formatNamesList(missingGroupNames, 'group', 'groups')}`);
         const createGroupsResponses = await Promise.all(
-            missingGroupNames.map(name => client.scim.groups.createGroup({
+            missingGroupNames.map(name => client.scim.createGroup({
                 schemas: [
                     client.scim.Schemas.Core,
                     client.scim.Schemas.Ionic
@@ -41,9 +41,9 @@ if (require.main === module) {
     require('dotenv').config();
     const path = require('path');
     const { writeFileSync } = require('fs');
-    const { Client: IonicClient } = require('ionic-admin-sdk');
+    const { IonicApiClient } = require('ionic-admin-sdk');
 
-    const client = new IonicClient({
+    const client = new IonicApiClient({
         baseUrl: process.env.IONIC_API_BASE_URL,
         tenantId: process.env.IONIC_TENANT_ID,
         auth: {

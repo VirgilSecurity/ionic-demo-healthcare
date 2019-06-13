@@ -1,14 +1,14 @@
 require('dotenv').config();
 const path = require('path');
 const { writeFileSync } = require('fs');
-const { Client: IonicClient } = require('ionic-admin-sdk');
+const { IonicApiClient } = require('ionic-admin-sdk');
 const createIonicGroups = require('./create-ionic-groups');
 const createIonicDataMarkings = require('./create-ionic-data-markings');
 const createIonicPolicies = require('./create-ionic-data-policies');
 const createDynamoDbTable = require('./create-dynamodb-table');
 
 async function main() {
-    const client = new IonicClient({
+    const client = new IonicApiClient({
         baseUrl: process.env.IONIC_API_BASE_URL,
         tenantId: process.env.IONIC_TENANT_ID,
         auth: {

@@ -13,7 +13,7 @@ class UserService {
     }
 
     debug('searching for existing user');
-    const findUsersResponse = await this.client.scim.users.listUsers({
+    const findUsersResponse = await this.client.scim.listUsers({
       limit: 1,
       attributes: ['emails', 'groups', 'name'],
       filter: { email }
@@ -31,7 +31,7 @@ class UserService {
       }
     } else {
       debug('creating new user');
-      user = await this.client.scim.users.createUser({
+      user = await this.client.scim.createUser({
         schemas: [this.client.scim.Schemas.Core, this.client.scim.Schemas.Ionic],
         name: {
             givenName: firstName,

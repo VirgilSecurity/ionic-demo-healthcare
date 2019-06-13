@@ -37,9 +37,9 @@ module.exports = createIonicDataMarkings;
 
 if (require.main === module) {
     require('dotenv').config();
-    const { Client: IonicClient } = require('ionic-admin-sdk');
+    const { IonicApiClient } = require('ionic-admin-sdk');
 
-    const client = new IonicClient({
+    const client = new IonicApiClient({
         baseUrl: process.env.IONIC_API_BASE_URL,
         tenantId: process.env.IONIC_TENANT_ID,
         auth: {
