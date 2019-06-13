@@ -67,7 +67,7 @@ export class IonicAgent {
     }
 
     private getIonicAssertion(samlResponseXml: string) {
-        console.log('Sending SAML response to enrollemnt url');
+        console.log('Sending SAML response to enrollment url');
         return fetch(this.profileInfo.enrollmentUrl, {
             mode: 'cors',
             method: 'POST',
@@ -77,6 +77,9 @@ export class IonicAgent {
             body: new URLSearchParams({ SAMLResponse: samlResponseXml })
         }).then(enrollmentResponse => {
             console.log(`Enrollment response: ${enrollmentResponse.status}`);
+            if (!enrollmentResponse.ok) {
+                throw new Error(`Enrollment server responded with the status ${enrollmentResponse.status}`);
+            }
             const ionicAssertion = {
                 'X-Ionic-Reg-Uidauth': enrollmentResponse.headers.get('X-Ionic-Reg-Uidauth'),
                 'X-Ionic-Reg-Stoken': enrollmentResponse.headers.get('X-Ionic-Reg-Stoken'),

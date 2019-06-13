@@ -13,17 +13,16 @@ class UserService {
     }
 
     debug('searching for existing user');
-    const findUsersResponse = await this.client.findUsers({
+    const findUsersResponse = await this.client.scim.listUsers({
       limit: 1,
       attributes: ['emails', 'groups', 'name'],
-      searchParams: { email }
+      filter: { email }
     });
 
     let user;
     if (findUsersResponse.totalResults > 0) {
       debug('found existing user');
       user = findUsersResponse.Resources[0];
-      // check if the user belong to the group
       const hasGroup = user.groups.some(g => g.value === groupId);
       if (!hasGroup) {
         throw new Error(
@@ -32,7 +31,20 @@ class UserService {
       }
     } else {
       debug('creating new user');
-      user = await this.client.createUser({ firstName, lastName, email, groupId });
+      user = await this.client.scim.createUser({
+        schemas: [this.client.scim.Schemas.Core, this.client.scim.Schemas.Ionic],
+        name: {
+            givenName: firstName,
+            familyName: lastName,
+            formatted: `${firstName} ${lastName}`
+        },
+        emails: [{ value: email }],
+        [this.client.scim.Schemas.Ionic]: {
+            domainUpn: email,
+            sendEmail: false,
+            groups: [{ type: 'group', value: groupId }]
+        }
+      });
     }
     return user;
   }
