@@ -21,19 +21,19 @@ module.exports = {
         {
             policyId: 'Healthcare Demo Patients',
             ruleCombiningAlgId: 'first-applicable',
-            appliesToGroup: PATIENTS,
+            appliesToGroup: [PATIENTS],
             allowDataMarkedWith: [MEDICAL_HISTORY, OFFICE_VISIT_NOTES, PRESCRIPTION_ORDER, INSURANCE_REPLY]
         },
         {
             policyId: 'Healthcare Demo Physicians',
             ruleCombiningAlgId: 'first-applicable',
-            appliesToGroup: PHYSICIANS,
+            appliesToGroup: [PHYSICIANS],
             allowDataMarkedWith: [MEDICAL_HISTORY, OFFICE_VISIT_NOTES, PRESCRIPTION_ORDER, INSURANCE_REPLY]
         },
         {
             policyId: 'Healthcare Demo Insurers',
             ruleCombiningAlgId: 'first-applicable',
-            appliesToGroup: INSURERS,
+            appliesToGroup: [INSURERS],
             allowDataMarkedWith: [OFFICE_VISIT_NOTES, INSURANCE_REPLY]
         }
     ]
