@@ -1,5 +1,5 @@
-declare namespace IonicSdk {
-    interface IProfileInfo {
+declare module 'ionic-js-sdk' {
+    export interface IProfileInfo {
         appId: string;
         userId: string;
         userAuth: string;
@@ -7,32 +7,33 @@ declare namespace IonicSdk {
         deviceId?: string;
     }
 
-    interface ISdkResponse {
+    export interface IProfileInfoWithSamlAssertion implements IProfileInfo {
+        samlAssertionXml: string;
+    }
+
+    export interface ISdkResponse {
         sdkResponseCode: number;
     }
 
-    interface IChunkCipherInput {
+    export interface IChunkCipherInput {
         stringData: string;
         cipher?: 'v1'|'v2';
         attributes?: { [key: string]: string };
         mutableAttributes?: { [key: string]: string|string[] };
     }
 
-    interface IChunkCipherOutput {
+    export interface IChunkCipherOutput {
         stringChunk: string;
     }
 
-    class ISAgent {
+    export class ISAgent {
         constructor(sourceUrl?: string);
         enrollUser(profileInfo: IProfileInfo): Promise<ISdkResponse>;
+        enrollUserWithSamlAssertion(profileInfo: IProfileInfoWithSamlAssertion): Promise<ISdkResponse>;
         loadUser(profileInfo: IProfileInfo): Promise<ISdkResponse & { profiles: ({ deviceId: string})[] }>;
         createDevice(ionicAssertion: object): Promise<ISdkResponse>;
         encryptStringChunkCipher(input: IChunkCipherInput): Promise<IChunkCipherOutput>;
         decryptStringChunkCipher(input: IChunkCipherInput): Promise<IChunkCipherOutput>;
         setActiveProfile(profileInfo): Promise<ISdkResponse>;
     }
-}
-
-declare global {
-    const IonicSdk = IonicSdk;
 }

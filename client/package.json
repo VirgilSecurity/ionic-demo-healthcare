@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "async-mutex": "^0.1.3",
+    "ionic-js-sdk": "https://github.com/VirgilSecurity/ionic-js-sdk/releases/download/v2.1.0/ionic-js-sdk-2.1.0.tgz",
     "mobx": "^5.9.4",
     "mobx-react": "^5.4.3",
     "mobx-utils": "^5.2.0",
