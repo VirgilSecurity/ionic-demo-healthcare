@@ -1,4 +1,5 @@
 import { Mutex } from 'async-mutex';
+import { ISAgent, IProfileInfo, IProfileInfoWithSamlAssertion } from 'ionic-js-sdk';
 
 export interface IonicAgentParams {
     username: string;
@@ -12,8 +13,8 @@ export type DataClassification = 'Medical History'|'Office Visit Notes'|'Prescri
 const ActiveProfileMutex = new Mutex();
 
 export class IonicAgent {
-    profileInfo: IonicSdk.IProfileInfo;
-    sdk: IonicSdk.ISAgent;
+    profileInfo: IProfileInfo;
+    sdk: ISAgent;
     fetchSamlAssertion: () => Promise<string>;
 
     constructor({ username, password, fetchSamlAssertion, enrollmentUrl }: IonicAgentParams) {
@@ -21,15 +22,9 @@ export class IonicAgent {
             appId: 'healthcare-demo',
             userId: username,
             userAuth: password,
-            // This is a discard parameter that we don't actually use,
-            // because we employ a "hybrid" enrollment method where our
-            // app's backend acts as Identity Provider, i.e. generates
-            // SAML Assertion and Ionic Assertion for device enrollment.
-            // This is not an officially supported "method" of enrollment.
-            // For supported methods see https://dev.ionic.com/platform/enrollment
             enrollmentUrl: enrollmentUrl
         };
-        this.sdk = new IonicSdk.ISAgent();
+        this.sdk = new ISAgent('https://preview-api.ionic.com/jssdk/latest/');
         this.fetchSamlAssertion = fetchSamlAssertion;
     }
 
@@ -66,31 +61,6 @@ export class IonicAgent {
         });
     }
 
-    private getIonicAssertion(samlResponseXml: string) {
-        console.log('Sending SAML response to enrollment url');
-        return fetch(this.profileInfo.enrollmentUrl, {
-            mode: 'cors',
-            method: 'POST',
-            headers: {
-                'expect': '100-continue',
-            },
-            body: new URLSearchParams({ SAMLResponse: samlResponseXml })
-        }).then(enrollmentResponse => {
-            console.log(`Enrollment response: ${enrollmentResponse.status}`);
-            if (!enrollmentResponse.ok) {
-                throw new Error(`Enrollment server responded with the status ${enrollmentResponse.status}`);
-            }
-            const ionicAssertion = {
-                'X-Ionic-Reg-Uidauth': enrollmentResponse.headers.get('X-Ionic-Reg-Uidauth'),
-                'X-Ionic-Reg-Stoken': enrollmentResponse.headers.get('X-Ionic-Reg-Stoken'),
-                'X-Ionic-Reg-Ionic-API-Urls': enrollmentResponse.headers.get('X-Ionic-Reg-Ionic-API-Urls'),
-                'X-Ionic-Reg-Enrollment-Tag': enrollmentResponse.headers.get('X-Ionic-Reg-Enrollment-Tag'),
-                'X-Ionic-Reg-Pubkey': enrollmentResponse.headers.get('X-Ionic-Reg-Pubkey')
-            };
-            return ionicAssertion;
-        });
-    }
-
     loadProfile() {
         return this.loadUser()
         .catch(err => {
@@ -109,32 +79,15 @@ export class IonicAgent {
     }
 
     register() {
-        // Ionic JavaScript SDK assumes that an 'enrollment attempt' information
-        // already exists in localStorage prior to the call to `createDevice()`,
-        // that's why we're making an `enrollUser()` call with throwaway enrollment
-        // server url. This way we're bypassing the JSSDK requirement that the
-        // `createDevice()` call is made by an enrollment server.
-        // See https://api.ionic.com/jssdk/latest/Docs/ISAgent.html#enrollUser
-        return this.sdk.enrollUser(this.profileInfo)
-        .then(resp => {
-            if (resp.sdkResponseCode === 0) {
-                // Enrollment Attempt is created and saved in localStorage.
-                // Normally, this is where you would redirect the user
-                // to your Enrollment Server URL, specified by `resp.redirect`,
-                // for identity confirmation, which would then call `createDevice().
-                // We ignore `resp.redirect` and `resp.notifier` (which is a Promise
-                // that resolves when enrollment completes) here because we use custom
-                // enrollment "method" - see comment in the constructor of IonicAgent
-                return this.fetchSamlAssertion()
-                    .then(samlResponseXml => this.getIonicAssertion(samlResponseXml))
-                    .then(assertion => this.sdk.createDevice(assertion))
-                    .then(() => this.loadUser());
-            }
-            else {
-                console.log('Unexpected enrollment response: ', resp);
-                return Promise.reject(new Error('Error enrolling'));
-            }
-        });
+        return this.fetchSamlAssertion()
+        .then(samlAssertionXml => {
+            const profileInfoWithSamlAssertion: IProfileInfoWithSamlAssertion = {
+                ...this.profileInfo,
+                samlAssertionXml
+            };
+            return this.sdk.enrollUserWithSamlAssertion(profileInfoWithSamlAssertion);
+        })
+        .then(() => this.loadUser());
     }
 
     encryptText = this.runWithActiveProfile((plaintext: string, classification: DataClassification) => {
