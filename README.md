@@ -5,6 +5,7 @@ The Demo App is a simple web application that illustrates how distinct roles wit
 ## Prerequisites
 - Node.js >= 10 is required
 - Ionic and AWS credentials
+- Supported browsers: Chrome, Firefox, Safari, Opera.
 
 ### Ionic credentials
 - [Create and configure an Ionic Account](https://virgil.atlassian.net/wiki/spaces/VI/pages/1079083092/Create+and+Configure+Ionic+Account)
@@ -23,7 +24,12 @@ git clone https://github.com/VirgilSecurity/ionic-demo-healthcare.git
 
 - Using the command line interface, copy the file `.env.example` under the name `.env`:
 ```
+# for FreeBSD / Linux / Mac OS:
 cp .env.example .env
+
+# for Windows OS:
+copy .env.example .env
+
 ```
 - Fill in the Ionic and AWS values inside of .env file. The following environment variables must be defined to run the server:
 
