@@ -1,6 +1,6 @@
 # Ionic Healthcare Demo
 
-The Demo App is a simple web application that illustrates how distinct roles within a customer's application can be defined and used to restrict ePHI access in a HIPAA-compliant manner. The Demo App is based on use case involving a hypothetical business scenario involving a patient, physician and insurance provider. Read more in our [quickstart guide](https://virgil.atlassian.net/wiki/spaces/VI/pages/1086685216/Healthcare+Quickstart+Guide).
+The Demo App is a simple web application that illustrates how distinct roles within a customer's application can be defined and used to restrict ePHI access in a HIPAA-compliant manner. The Demo App is based on use case involving a hypothetical business scenario involving a patient, physician and insurance provider. Read more in our [quickstart guide](https://virgil.atlassian.net/wiki/spaces/VI/pages/1079083143/Healthcare+Quickstart+Guide?atlOrigin=eyJpIjoiZWI0MWNiNzVhMWVkNDNkZmEzMzJkNTE2ZmEwYmZmOWMiLCJwIjoiYyJ9).
 
 ## Prerequisites
 - Node.js >= 10 is required
