@@ -24,7 +24,7 @@ export class IonicAgent {
             userAuth: password,
             enrollmentUrl: enrollmentUrl
         };
-        this.sdk = new ISAgent('https://preview-api.ionic.com/jssdk/latest/');
+        this.sdk = new ISAgent(`${process.env.REACT_APP_IONIC_API_BASE_URL}/jssdk/latest/`);
         this.fetchSamlAssertion = fetchSamlAssertion;
     }
 

@@ -7,7 +7,7 @@ export interface IStoreProps {
     store?: Store;
 }
 
-const ENROLLMENT_URL = 'https://preview-enrollment.ionic.com/keyspace/JilX/sp/5c7ec51be5a7322a83fd22a5/headless/saml';
+const ENROLLMENT_URL = process.env.REACT_APP_IONIC_ENROLLMENT_ENDPOINT;
 
 export enum Device {
     Patient,
