@@ -1,6 +1,6 @@
 require('dotenv').config();
 const path = require('path');
-const { writeFileSync } = require('fs');
+const { writeFileSync, existsSync, mkdirSync } = require('fs');
 const { IonicApiClient } = require('ionic-admin-sdk');
 const createIonicGroups = require('./create-ionic-groups');
 const createIonicDataMarkings = require('./create-ionic-data-markings');
@@ -32,7 +32,9 @@ async function main() {
 
 function saveGroupsJson(groups) {
     const json = JSON.stringify(groups, null, 2);
-    writeFileSync(path.join(__dirname, '..', 'server', 'data', 'groups.json'), json);
+    const folder = path.join(__dirname, '..', 'server', 'data');
+    if (!existsSync(folder)) mkdirSync(folder);
+    writeFileSync(path.join(folder, 'groups.json'), json);
     console.log(
         'The following was written to server/data/groups.json: %s',
         json
