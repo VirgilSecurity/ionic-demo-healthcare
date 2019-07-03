@@ -36,7 +36,7 @@ copy .env.example .env
 | Variable Name | Description |
 | ------------- | ------------ |
 | IONIC_ENROLLMENT_ENDPOINT | URL of your Ionic Enrollment Server. Used for SAML assertion generation |
-| IONIC_IDP_PRIVATE_KEY_PATH | Path to private key file to use to sign SAML assertions |
+| IONIC_IDP_PRIVATE_KEY_PATH | Path to private key file (PEM) to use to sign SAML assertions |
 | IONIC_TENANT_ID | Your Ionic tenant ID |
 | IONIC_API_AUTH_TOKEN | Your Ionic API Key Secret Token (for accessing Management API). Must include SCIM User and Group management scopes |
 | AWS_ACCESS_KEY_ID | Your AWS Access Key ID. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
