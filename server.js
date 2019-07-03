@@ -2,6 +2,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 const express = require('express');
 const morgan = require('morgan');
+const { readFileSync } = require('fs');
 const { body: checkBody, validationResult, oneOf } = require('express-validator/check');
 const { buildSamlResponse, IonicApiClient } = require('ionic-admin-sdk');
 const debug = require('./server/debug');
@@ -17,7 +18,7 @@ function validateConfig() {
         'IONIC_IDP_ENTITY_ID',
         'IONIC_ASSERTION_CONSUMER_SERVICE',
         'IONIC_ENROLLMENT_ENDPOINT',
-        'IONIC_IDP_PRIVATE_KEY',
+        'IONIC_IDP_PRIVATE_KEY_PATH',
         'IONIC_API_BASE_URL',
         'IONIC_TENANT_ID',
         'IONIC_API_AUTH_TOKEN',
@@ -89,10 +90,9 @@ app.post(
 
     debug('generating SAML assertion');
     let samlResponse;
-
     try {
       samlResponse = buildSamlResponse({
-        privateKey: process.env.IONIC_IDP_PRIVATE_KEY,
+        privateKey: readFileSync(process.env.IONIC_IDP_PRIVATE_KEY_PATH, 'utf8'),
         userEmail: email,
         recipientUrl: process.env.IONIC_ENROLLMENT_ENDPOINT,
         recipientName: process.env.IONIC_ASSERTION_CONSUMER_SERVICE,

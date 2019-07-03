@@ -14,7 +14,7 @@ The Demo App is a simple web application that illustrates how distinct roles wit
 ### AWS credentials
 1. Create an [AWS account](https://portal.aws.amazon.com/billing/signup) to store your app's encrypted data
 2. Create an _Access Key_ for your AWS user. Use this guide to [get your AWS Security Credentials](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys).
- 
+
 ## Configure and Run the Demo
 
 - Clone the Demo application:
@@ -36,7 +36,7 @@ copy .env.example .env
 | Variable Name | Description |
 | ------------- | ------------ |
 | IONIC_ENROLLMENT_ENDPOINT | URL of your Ionic Enrollment Server. Used for SAML assertion generation |
-| IONIC_IDP_PRIVATE_KEY | Private key to use to sign SAML assertions |
+| IONIC_IDP_PRIVATE_KEY_PATH | Path to private key file (PEM) to use to sign SAML assertions |
 | IONIC_TENANT_ID | Your Ionic tenant ID |
 | IONIC_API_AUTH_TOKEN | Your Ionic API Key Secret Token (for accessing Management API). Must include SCIM User and Group management scopes |
 | AWS_ACCESS_KEY_ID | Your AWS Access Key ID. This is read by the `aws-sdk` to authenticate requests to DynamoDB |
