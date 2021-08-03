@@ -29,7 +29,7 @@
     "qs": "^6.7.0",
     "uuid": "^3.3.2",
     "xml-crypto": "^1.4.0",
-    "xmldom": "^0.1.27"
+    "xmldom": "^0.6.0"
   },
   "devDependencies": {
     "concurrently": "^4.1.0",
