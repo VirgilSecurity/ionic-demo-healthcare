@@ -26,7 +26,7 @@
     "got": "^9.6.0",
     "ionic-admin-sdk": "https://github.com/VirgilSecurity/ionic-admin-nodejs/releases/download/v0.2.2/ionic-admin-sdk-0.2.2.tgz",
     "morgan": "^1.9.1",
-    "qs": "^6.7.0",
+    "qs": "^6.7.3",
     "uuid": "^3.3.2",
     "xml-crypto": "^1.4.0",
     "xmldom": "^0.1.27"
